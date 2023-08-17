@@ -33,14 +33,16 @@ export default function Register() {
    return (
       <Container>
          <Title>
-            <h1>linkr</h1>
-            <p>
-               save, share and discover <br /> the best links on the web
-            </p>
+            <div>
+               <h1>linkr</h1>
+               <p>
+                  save, share and discover <br /> the best links on the web
+               </p>
+            </div>
          </Title>
 
          <Form onSubmit={signUp}>
-            <Input type="email" placeholder="e-mail" disabled={states.disabledInput} required />
+            <Input type="email" placeholder="e-mail" disabled={states.disabledInput} autoComplete="new-password" required />
             <Input
                type="password"
                placeholder="password"

@@ -7,6 +7,11 @@ export const Container = styled.div`
 
    font-weight: 700;
    color: #ffffff;
+
+   @media (min-width: 1024px) {
+      display: flex;
+      flex-direction: row;
+   }
 `
 export const Title = styled.div`
    width: 100%;
@@ -14,17 +19,29 @@ export const Title = styled.div`
    background: #151515;
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-   font-family: 'Oswald';
-   font-size: 23px;
-
    display: flex;
    flex-direction: column;
    justify-content: center;
    align-items: center;
 
+   font-family: 'Oswald';
+   font-size: 23px;
+
    h1 {
       font-family: 'Passion One';
       font-size: 76px;
+      text-align: center;
+   }
+
+   @media (min-width: 1024px) {
+      height: 100vh;
+      font-size: 43px;
+      padding: 0 100px 100px 0;
+
+      h1 {
+         font-size: 106px;
+         text-align: left;
+      }
    }
 `
 export const Form = styled.form`
@@ -35,6 +52,12 @@ export const Form = styled.form`
 
    margin-top: 40px;
    font-family: 'Passion One';
+
+   @media (min-width: 1024px) {
+      padding-inline: 54px;
+      justify-content: center;
+      margin-top: 0px;
+   }
 `
 
 export const Input = styled.input`
@@ -48,13 +71,11 @@ export const Input = styled.input`
    font-size: 22px;
    font-weight: 700;
 
-   &:not([type='submit']) {
-      padding: 10px 17px;
-      background: #fff;
+   padding: 10px 17px;
+   background: #fff;
 
-      &::placeholder {
-         color: #9f9f9f;
-      }
+   &::placeholder {
+      color: #9f9f9f;
    }
 
    &:disabled {
