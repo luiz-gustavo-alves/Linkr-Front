@@ -42,7 +42,13 @@ export default function Register() {
          </Title>
 
          <Form onSubmit={signUp}>
-            <Input type="email" placeholder="e-mail" disabled={states.disabledInput} autoComplete="new-password" required />
+            <Input
+               type="email"
+               placeholder="e-mail"
+               disabled={states.disabledInput}
+               autoComplete="new-password"
+               required
+            />
             <Input
                type="password"
                placeholder="password"
