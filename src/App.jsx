@@ -5,14 +5,15 @@ import {
   Navigate
 } from "react-router-dom";
 
-import Header from "./components/Header";
+import {
+  Header
+} from "./components";
 
 import {
   Login,
   Register,
   Home,
   HashtagPage,
-  SearchPosts,
   UserPage
 } from "./pages";
 
@@ -24,12 +25,10 @@ export default function App() {
 
   const { pathname } = useLocation();
 
-  function showHeader (pathname) {
-
+  const showHeader = (pathname) => {
     if (pathname === "/" || pathname === "/sign-up") {
       return false;
     }
-
     return true;
   }
 
@@ -42,7 +41,6 @@ export default function App() {
         <Route path="/timeline" element={<Home />}></Route>
         <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
         <Route path="/user/:id" element={<UserPage />}></Route>
-        <Route path="/timeline/search/" element={<SearchPosts />}></Route>
         <Route path="*" element={<Navigate to="/timeline" />}></Route>
       </Routes>
     </>
