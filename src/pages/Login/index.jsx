@@ -1,37 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Container, Title, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
-import { RotatingLines } from 'react-loader-spinner'
-import authService from '../../services/auth.service'
 import { useNavigate } from 'react-router-dom'
+import authService from '../../services/auth.service'
+import { AuthContext } from '../../contexts/auth.context'
+import { FormsContext } from '../../contexts/forms.context'
+import BannerSign from '../../components/BannerSign/BannerSign'
 
 export default function Login() {
    const navigate = useNavigate()
 
-   useEffect(() => {
-      const data = JSON.parse(localStorage.getItem('auth'))
+   const { isLogged, persistenceLogin } = useContext(AuthContext)
+   const { states, setStates, loading } = useContext(FormsContext)
 
-      if (data) {
-         console.log('Será redirecionado')
-         /* navigate('/') */
-      }
+   useEffect(() => {
+      isLogged()
    }, [])
 
-   const [states, setStates] = useState({
-      loadingVisibility: false,
-      disabledInput: false,
-      loadingColor: 'white'
+   const [form, setForm] = useState({
+      email: '',
+      password: ''
    })
-   const loading = (
-      <RotatingLines
-         strokeColor={states.loadingColor}
-         strokeWidth="5"
-         animationDuration="0.75"
-         width="22"
-         visible={states.loadingVisibility}
-      />
-   )
 
-   const signIn = (e) => {
+   const handleSignIn = (e) => {
       e.preventDefault()
 
       setStates({
@@ -39,30 +29,52 @@ export default function Login() {
          loadingVisibility: !states.loadingVisibility,
          loadingColor: 'grey'
       })
+
+      authService
+         .signIn(form)
+         .then((response) => {
+            // persistenceLogin(response.data)
+            // navigate('/timeline')
+         })
+         .catch((error) => {
+            alert(error)
+            setStates({
+               ...states,
+               disabledInput: false,
+               loadingVisibility: false,
+               loadingColor: 'white'
+            })
+         })
+   }
+
+   function handleChangeForm(e) {
+      setForm({ ...form, [e.target.type]: e.target.value })
    }
 
    return (
       <Container>
-         <Title>
-            <h1>linkr</h1>
-            <p>
-               save, share and discover <br /> the best links on the web
-            </p>
-         </Title>
+         <BannerSign />
 
-         <Form onSubmit={signIn}>
-            <Input type="email" placeholder="e-mail" disabled={states.disabledInput} required />
+         <Form onSubmit={handleSignIn}>
+            <Input
+               type="email"
+               placeholder="e-mail"
+               disabled={states.disabledInput}
+               value={form.email}
+               onChange={handleChangeForm}
+            />
             <Input
                type="password"
                placeholder="password"
                disabled={states.disabledInput}
-               required
+               value={form.password}
+               onChange={handleChangeForm}
             />
             <InputButton type="submit" disabled={states.disabledInput}>
                {loading} Log In
             </InputButton>
 
-            <Link href="#">First time? Create an account!</Link>
+            <Link onClick={() => navigate('/sign-up')}>First time? Create an account!</Link>
          </Form>
       </Container>
    )
