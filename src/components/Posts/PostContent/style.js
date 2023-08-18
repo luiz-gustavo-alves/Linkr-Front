@@ -78,6 +78,25 @@ const PostTitle = styled.h3`
     color: #FFF;
 `;
 
+const EditPostForm = styled.form`
+
+    width: 100%;
+
+    textarea {
+        width: 100%;
+        height: 68px;
+        resize: none;
+        border: none;
+        outline: none;
+        border-radius: 7px;
+        background-color: #EFEFEF;
+        padding: 10px;
+        font-family: 'Lato', sans-serif;
+        font-size: 15px;
+        color: #949494;
+    }
+`;
+
 const IconsContainer = styled.div`
 
     display: flex;
@@ -134,6 +153,7 @@ export {
     RightPostContainer,
     RightPostTopContent,
     PostTitle,
+    EditPostForm,
     IconsContainer,
     EditIcon,
     DeleteIcon,

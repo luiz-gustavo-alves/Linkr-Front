@@ -2,19 +2,19 @@ import API from "./api";
 import { createConfig } from "./api";
 
 function createPost (payload, token) {
+    const config = createConfig(token);
     return API.post("/create-post", payload);
 }
 
-function updatePost (payload, token) {
+function updatePost (payload, postID, token) {
 
     const config = createConfig(token);
-    return API.put("/update-post", payload, config);
+    return API.put(`/update-post/${postID}`, payload);
 }
 
-function deletePost (payload, token) {
-
+function deletePost (postID, token) {
     const config = createConfig(token);
-    return API.delete("/delete-post", payload, config);
+    return API.delete(`/delete-post/${postID}`);
 }
 
 const postService = {

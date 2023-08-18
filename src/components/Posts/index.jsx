@@ -41,7 +41,7 @@ export default function Posts({ data, details }) {
         }
 
         {showPosts && data.map((data) => (
-            <PostContent key={data} data={data} />
+            <PostContent key={data.postID} data={data} fetchTimeline={fetchTimeline} />
           ))
         }
       </Content>
