@@ -1,11 +1,10 @@
-import userService from "../../services/user.service";
-
 import {
   Posts
 } from "../../components";
 
 import { useEffect, useState } from "react";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
+import userService from "../../services/user.service";
 
 export default function Home() {
 
