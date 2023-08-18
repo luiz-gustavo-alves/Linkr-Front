@@ -10,15 +10,15 @@ import { useEffect, useState } from "react";
 export default function UserPage() {
 
   const [postData, setPostData] = useState(null);
+  const [postDetails, setPostDetails] = useState({
+    title: "Juvenal",
+    userPublish: false,
+    defaultMessage: "Loading"
+  })
 
   useEffect(() => {
 
   }, []);
-
-  const postDetails = {
-    title: "Juvenal",
-    userPublish: false
-  }
 
   return (
     <Posts 
