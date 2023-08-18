@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Title, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
 import { RotatingLines } from 'react-loader-spinner'
+import authService from '../../services/auth.service'
 
 // import authService from '../../services/auth.service'
 
 export default function Register() {
+
+   useEffect(() => {
+
+   }, [])
+
    const [states, setStates] = useState({
       loadingVisibility: false,
       disabledInput: false,

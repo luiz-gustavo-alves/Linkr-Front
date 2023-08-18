@@ -1,10 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Title, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
 import { RotatingLines } from 'react-loader-spinner'
-
-// import authService from '../../services/auth.service'
+import authService from '../../services/auth.service'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
+   const navigate = useNavigate()
+
+   useEffect(() => {
+      const data = JSON.parse(localStorage.getItem('auth'))
+
+      if (data) {
+         console.log('Será redirecionado')
+         /* navigate('/') */
+      }
+   }, [])
+
    const [states, setStates] = useState({
       loadingVisibility: false,
       disabledInput: false,
