@@ -14,10 +14,19 @@ export function AuthProvider({ children }) {
    }
 
    const isLogged = () => {
-      return auth && Object.keys(auth).length > 0 ? true : false
+      return localData && Object.keys(localData).length > 0 ? true : false
+   }
+
+   const logout = () => {
+      
+         localStorage.clear()
+         navigate('/')
+      
    }
 
    return (
-      <AuthContext.Provider value={{ isLogged, persistenceLogin }}>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={{ isLogged, persistenceLogin, logout }}>
+         {children}
+      </AuthContext.Provider>
    )
 }
