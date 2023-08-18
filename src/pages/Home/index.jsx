@@ -1,23 +1,43 @@
-import postService from '../../services/posts.service'
-import userService from '../../services/user.service'
+import {
+  Posts
+} from "../../components";
 
-import { AuthContext } from '../../contexts/auth.context'
-import { useContext, useEffect } from 'react'
+import { useEffect, useState } from "react";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
+import userService from "../../services/user.service";
 
 export default function Home() {
-   const { logout } = useContext(AuthContext)
 
-   useEffect(() => {
+  const { fetch } = useFetchTimeline();
 
-   }, [])
-   return (
-      <>
-         <h1>Home</h1>
-         <h1
-            onClick={() => logout()}
-         >
-            Sair
-         </h1>
-      </>
-   )
+  const [postData, setPostData] = useState(null);
+  const [postDetails, setPostDetails] = useState({
+    title: "Timeline",
+    userPublish: true,
+    defaultMessage: "Loading"
+  })
+
+  useEffect(() => {
+
+    userService.getTimelinePosts()
+      .then(res => {
+
+        if (res.data.length === 0) {
+          setPostDetails({...postDetails, defaultMessage: "There are no posts yet"});
+        }
+        setPostData(res.data);
+      })
+      .catch(() => setPostDetails({
+          ...postDetails, 
+          defaultMessage:"An error occured while trying to fetch the posts, please refresh the page"
+        }));
+
+  }, [fetch]);
+
+  return (
+    <Posts 
+      data={postData}
+      details={postDetails}
+    />
+  )
 }
