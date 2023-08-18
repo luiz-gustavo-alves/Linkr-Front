@@ -17,6 +17,9 @@ import {
   UserPage
 } from "./pages";
 
+import {
+  FetchTimelineProvider
+} from "./contexts"
 
 import "./assets/styles/reset.css";
 import "./assets/styles/style.css";
@@ -33,7 +36,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <FetchTimelineProvider>
       {showHeader(pathname) && <Header />}
       <Routes>
         <Route path="/" element={<Login />}></Route>
@@ -43,6 +46,6 @@ export default function App() {
         <Route path="/user/:id" element={<UserPage />}></Route>
         <Route path="*" element={<Navigate to="/timeline" />}></Route>
       </Routes>
-    </>
+    </FetchTimelineProvider>
   )
 }
