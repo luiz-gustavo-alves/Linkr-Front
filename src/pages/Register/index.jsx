@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
 import BannerSign from '../../components/BannerSign/BannerSign'
@@ -10,6 +10,15 @@ import { FormsContext } from '../../contexts/forms.context'
 export default function Register() {
    const navigate = useNavigate()
    const { states, setStates, loading } = useContext(FormsContext)
+
+   useEffect(() => {
+      setStates({
+         ...states,
+         disabledInput: false,
+         loadingVisibility: false,
+         loadingColor: 'white'
+      })
+   }, [])
 
    const [form, setForm] = useState({
       name: '',
@@ -30,10 +39,11 @@ export default function Register() {
       authService
          .signUp(form)
          .then((response) => {
-            // navigate('/')
+            console.log(response.data)
+            navigate('/')
          })
          .catch((error) => {
-            alert(error)
+            alert(error.response.data)
             setStates({
                ...states,
                disabledInput: false,
@@ -78,7 +88,7 @@ export default function Register() {
             />
 
             <Input
-               type="url"
+               type="text"
                placeholder="picture url"
                disabled={states.disabledInput}
                value={form.imageURL}

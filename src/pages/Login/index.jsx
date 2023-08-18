@@ -13,7 +13,14 @@ export default function Login() {
    const { states, setStates, loading } = useContext(FormsContext)
 
    useEffect(() => {
-      isLogged()
+      setStates({
+         ...states,
+         disabledInput: false,
+         loadingVisibility: false,
+         loadingColor: 'white'
+      })
+
+      if (isLogged()) navigate('/timeline')
    }, [])
 
    const [form, setForm] = useState({
@@ -33,11 +40,11 @@ export default function Login() {
       authService
          .signIn(form)
          .then((response) => {
-            // persistenceLogin(response.data)
-            // navigate('/timeline')
+            persistenceLogin(response.data)
+            navigate('/timeline')
          })
          .catch((error) => {
-            alert(error)
+            alert(error.response.data)
             setStates({
                ...states,
                disabledInput: false,
