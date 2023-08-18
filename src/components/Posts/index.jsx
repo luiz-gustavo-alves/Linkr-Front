@@ -27,9 +27,11 @@ import DefaultPost from "../DefaultPost"
 import React from "react";
 
 import { useEffect, useState } from "react";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function Posts({ data, details }) {
 
+  const { fetchTimeline } = useFetchTimeline();
   const [showPosts, setShowPosts] = useState(false);
 
   const postDescriptionParser = (description) => {
@@ -60,23 +62,23 @@ export default function Posts({ data, details }) {
       <Content>
 
         <Title>{details.title}</Title>
-        {details.userPublish && <UserPublish />}
+        {details.userPublish && <UserPublish fetch={fetch} fetchTimeline={fetchTimeline} />}
 
         {!showPosts && <DefaultPost message={details.defaultMessage} />}
 
-        {showPosts && data.map((data, index) => (
-          <PostContainer key={index}>
+        {showPosts && data.map((data) => (
+          <PostContainer key={data.postID}>
             <LeftPostContainer>
-              <ProfilePicture src={data.imageURL} />
+              <ProfilePicture src={data.user.img} />
               <LikeContainer>
                 <LikeButton />
-                <LikeCounter>{data.likesCount} likes</LikeCounter>
+                <LikeCounter>{data.likes} likes</LikeCounter>
               </LikeContainer>
             </LeftPostContainer>
 
             <RightPostContainer>
-              <PostTitle>{data.name}</PostTitle>
-              <PostDescription key={index}>{postDescriptionParser(data.description)}</PostDescription>
+              <PostTitle>{data.user.name}</PostTitle>
+              <PostDescription>{postDescriptionParser(data.description)}</PostDescription>
 
               <URLContainer>
                 <a href={data.URL} title={data.URL_title} target="blank">

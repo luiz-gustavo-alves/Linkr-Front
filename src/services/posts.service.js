@@ -2,9 +2,7 @@ import API from "./api";
 import { createConfig } from "./api";
 
 function createPost (payload, token) {
-
-    const config = createConfig(token);
-    return API.post("/create-post", payload, config);
+    return API.post("/create-post", payload);
 }
 
 function updatePost (payload, token) {

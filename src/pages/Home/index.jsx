@@ -1,4 +1,3 @@
-import postService from "../../services/posts.service";
 import userService from "../../services/user.service";
 
 import {
@@ -6,8 +5,11 @@ import {
 } from "../../components";
 
 import { useEffect, useState } from "react";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function Home() {
+
+  const { fetch } = useFetchTimeline();
 
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
@@ -31,7 +33,7 @@ export default function Home() {
           defaultMessage:"An error occured while trying to fetch the posts, please refresh the page"
         }));
 
-  }, []);
+  }, [fetch]);
 
   return (
     <Posts 

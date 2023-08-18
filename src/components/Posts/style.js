@@ -33,10 +33,6 @@ const PostContainer = styled.div`
     border-radius: 10px;
     margin: 20px 0;
     padding: 20px;
-
-    h3 {
-        word-break: break-all;
-    }
 `;
 
 const LeftPostContainer = styled.div`
@@ -114,6 +110,11 @@ const URLContainer = styled.div`
     border: 1px solid #4D4D4D;
     border-radius: 10px;
     cursor: pointer;
+    transition: all .2s;
+
+    &:hover {
+        opacity: 0.8;
+    }
 `;
 
 const URLContentContainer = styled.div`
@@ -142,6 +143,7 @@ const URLDescription = styled.h3`
     font-size: 11px;
     line-height: 16px;
     color: #9B9595;
+    word-break: break-all;
 `;
 
 const URLContent = styled.h3`
@@ -149,6 +151,7 @@ const URLContent = styled.h3`
     font-size: 11px;
     line-height: 16px;
     color: #9B9595;
+    word-break: break-all;
 `;
 
 const URLImageContainer = styled.div`
