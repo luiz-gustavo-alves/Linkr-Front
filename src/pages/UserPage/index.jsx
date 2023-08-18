@@ -1,8 +1,29 @@
+import postService from "../../services/posts.service";
 import userService from "../../services/user.service";
+
+import {
+  Posts
+} from "../../components";
+
+import { useEffect, useState } from "react";
 
 export default function UserPage() {
 
+  const [postData, setPostData] = useState(null);
+  const [postDetails, setPostDetails] = useState({
+    title: "Juvenal",
+    userPublish: false,
+    defaultMessage: "Loading"
+  })
+
+  useEffect(() => {
+
+  }, []);
+
   return (
-    <h1>UserPage</h1>
+    <Posts 
+      data={postData}
+      details={postDetails}
+    />
   )
 }
