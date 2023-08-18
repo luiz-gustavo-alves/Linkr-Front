@@ -22,14 +22,38 @@ import {
   URLImage
 } from "./style";
 
-import {
-  kirby,
-  react
-} from "../../assets/images";
-
 import UserPublish from "./UserPublish";
+import DefaultPost from "../DefaultPost"
+import React from "react";
+
+import { useEffect, useState } from "react";
 
 export default function Posts({ data, details }) {
+
+  const [showPosts, setShowPosts] = useState(false);
+
+  const postDescriptionParser = (description) => {
+  
+    const parser = description.split(' ').map((text, index) => {
+      if (text.startsWith("#")) {
+        return <Hashtag key={index} title={text}>{text} </Hashtag>
+      } else {
+        return <React.Fragment key={index}>{text} </React.Fragment>
+      }
+    });
+
+    return parser;
+  }
+
+  useEffect(() => {
+
+    if (!data) {
+      return;
+    }
+
+    (data.length > 0) ? setShowPosts(true) : setShowPosts(false);
+
+  }, [ data ]);
 
   return (
     <Container>
@@ -38,69 +62,39 @@ export default function Posts({ data, details }) {
         <Title>{details.title}</Title>
         {details.userPublish && <UserPublish />}
 
-        <PostContainer>
-          <LeftPostContainer>
-            <ProfilePicture src={kirby} />
-            <LikeContainer>
-              <LikeButton />
-              <LikeCounter>0 likes</LikeCounter>
-            </LikeContainer>
-          </LeftPostContainer>
+        {!showPosts && <DefaultPost message={details.defaultMessage} />}
 
-          <RightPostContainer>
-            <PostTitle>Juvenal</PostTitle>
-            <PostDescription>
-              Muito maneiro esse tutorial de Material UI com React, deem uma olhada! <Hashtag>#react</Hashtag> <Hashtag>#material</Hashtag>
-            </PostDescription>
+        {showPosts && data.map((data, index) => (
+          <PostContainer key={index}>
+            <LeftPostContainer>
+              <ProfilePicture src={data.imageURL} />
+              <LikeContainer>
+                <LikeButton />
+                <LikeCounter>{data.likesCount} likes</LikeCounter>
+              </LikeContainer>
+            </LeftPostContainer>
 
-            <URLContainer>
-              <a href="https://medium.com/@pshrmn/a-simple-react-router" title="Como aplicar o Material UI em um projeto React">
-                <URLContentContainer>
-                  <URLDetails>
-                    <URLTitle>Como aplicar o Material UI em um projeto React</URLTitle>
-                    <URLDescription>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page.</URLDescription>
-                    <URLContent>https://medium.com/@pshrmn/a-simple-react-router</URLContent>
-                  </URLDetails>
-                  <URLImageContainer>
-                    <URLImage src={react} />
-                  </URLImageContainer>
-                </URLContentContainer>
-              </a>
-            </URLContainer>
-          </RightPostContainer>
-        </PostContainer>
+            <RightPostContainer>
+              <PostTitle>{data.name}</PostTitle>
+              <PostDescription key={index}>{postDescriptionParser(data.description)}</PostDescription>
 
-        <PostContainer>
-          <LeftPostContainer>
-            <ProfilePicture src={kirby} />
-            <LikeContainer>
-              <LikeButton />
-              <LikeCounter>0 likes</LikeCounter>
-            </LikeContainer>
-          </LeftPostContainer>
-
-          <RightPostContainer>
-            <PostTitle>Juvenal</PostTitle>
-            <PostDescription>
-              Muito maneiro esse tutorial de Material UI com React, deem uma olhada! <Hashtag>#react</Hashtag> <Hashtag>#material</Hashtag>
-            </PostDescription>
-
-            <URLContainer>
-              <a href="https://medium.com/@pshrmn/a-simple-react-router" title="Como aplicar o Material UI em um projeto React">
-                <URLContentContainer>
-                  <URLDetails>
-                    <URLTitle>Como aplicar o Material UI em um projeto React</URLTitle>
-                    <URLDescription>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page.</URLDescription>
-                    <URLContent>https://medium.com/@pshrmn/a-simple-react-router</URLContent>
-                  </URLDetails>
-                  <URLImageContainer>
-                    <URLImage src={react} />
-                  </URLImageContainer>
-                </URLContentContainer>
-              </a>
-            </URLContainer>
-          </RightPostContainer>
-        </PostContainer>
+              <URLContainer>
+                <a href={data.URL} title={data.URL_title} target="blank">
+                  <URLContentContainer>
+                    <URLDetails>
+                      <URLTitle>{data.URL_title}</URLTitle>
+                      <URLDescription>{data.URL_description}</URLDescription>
+                      <URLContent>{data.URL}</URLContent>
+                    </URLDetails>
+                    <URLImageContainer>
+                      <URLImage src={data.URL_image} />
+                    </URLImageContainer>
+                  </URLContentContainer>
+                </a>
+              </URLContainer>
+            </RightPostContainer>
+          </PostContainer>
+        ))}
 
       </Content>
     </Container>

@@ -1,7 +1,7 @@
 import API from "./api";
 import { createConfig } from "./api";
 
-function getPosts () {
+function getTimelinePosts () {
     return API.get("/timeline");
 }
 
@@ -18,7 +18,7 @@ function getPostsBySearch (query) {
 }
 
 const userService = {
-    getPosts,
+    getTimelinePosts,
     getPostsByUser,
     getPostsByHashtag,
     getPostsBySearch

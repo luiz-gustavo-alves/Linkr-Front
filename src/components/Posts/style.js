@@ -33,6 +33,10 @@ const PostContainer = styled.div`
     border-radius: 10px;
     margin: 20px 0;
     padding: 20px;
+
+    h3 {
+        word-break: break-all;
+    }
 `;
 
 const LeftPostContainer = styled.div`
@@ -159,6 +163,8 @@ const URLImageContainer = styled.div`
 const URLImage = styled.img`
 
     width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 export {
