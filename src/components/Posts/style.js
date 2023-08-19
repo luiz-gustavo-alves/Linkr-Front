@@ -9,12 +9,11 @@ const Content = styled.div`
 
     display: flex;
     flex-direction: column;
-    width: 612px;
+    width: 938px;
     margin: 0 auto;
 `;
 
 const Title = styled.h2`
-
     font-family: 'Oswald', sans-serif;
     font-size: 43px;
     font-weight: 700;
@@ -27,3 +26,43 @@ export {
     Content,
     Title
 }
+
+export const Body = styled.div`
+  width: 100%;
+  display: flex;
+`
+export const PostsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 612px;
+`
+export const HashtagsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 301px;
+  height: 100%;
+  background-color: #171717;
+  color: #FFFFFF;
+  border-radius: 15px;
+  margin-left: 25px;
+`
+export const DivH1 = styled.div`
+  width: 301px;
+  padding: 15px;
+  border-bottom: solid 1px #484848;
+  border-radius: 15px 15px 0 0;
+  h1{
+    font-size: 27px;
+    font-weight: 700;
+  }
+`
+export const ListHashtags = styled.div`
+  width: 301px;
+  padding: 12px 15px 0;
+  border-radius: 0 0 15px 15px;
+  h2{
+    font-size: 19px;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+`

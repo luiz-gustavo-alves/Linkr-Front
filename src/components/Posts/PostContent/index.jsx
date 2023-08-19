@@ -21,6 +21,7 @@ import URLContent from "../URLContent";
 import React, { useState, useEffect, useContext } from "react";
 import postService from "../../../services/posts.service";
 import { AuthContext } from "../../../contexts/auth.context";
+import { useNavigate } from "react-router-dom";
 
 export default function PostContent({ data, fetchTimeline }) {
 
@@ -70,13 +71,18 @@ export default function PostContent({ data, fetchTimeline }) {
         });
     }
   }
+  const navigate = useNavigate();
+  const navigateToHashtag = (hashtag) => {
+    const cleanedHashtag = hashtag.replace(/^#/, '');
+    navigate(`/hashtag/${cleanedHashtag}`);
+  };
 
   function postDescriptionParser (description) {
 
     const parser = description.split(' ').map((text, index) => {
       
       if (text.startsWith("#")) {
-        return <Hashtag key={index} title={text}>{text} </Hashtag>
+        return <Hashtag onClick={()=>navigateToHashtag(text)} key={index} title={text}>{text} </Hashtag>
       } else {
         return <React.Fragment key={index}>{text} </React.Fragment>
       }

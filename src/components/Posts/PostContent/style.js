@@ -11,7 +11,7 @@ const PostContainer = styled.div`
     display: flex;
     background-color: #000;
     border-radius: 10px;
-    margin: 20px 0;
+    margin-bottom: 40px;
     padding: 20px;
 `;
 

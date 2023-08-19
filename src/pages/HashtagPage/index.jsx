@@ -7,6 +7,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import hashService from "../../services/hash.service";
 
 export default function HashtagPage() {
 
@@ -20,8 +21,18 @@ export default function HashtagPage() {
   })
 
   useEffect(() => {
-
-  }, []);
+    hashService.hashtagPosts(hashtag)
+    .then(res => {
+      console.log(res.data[0]);
+      setPostData(res.data[0].posts);
+      setPostDetails((prevDetails) => ({
+        ...prevDetails,
+        title: res.data[0].hashtag
+      }));
+      
+    })
+    .catch((err) => console.log(err));
+  }, [hashtag]);
 
   return (
     <Posts 
