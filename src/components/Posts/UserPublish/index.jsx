@@ -6,15 +6,13 @@ import {
   FormButtonContainer
 } from "./style";
 
-import {
-  kirby 
-} from "../../../assets/images";
-
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from '../../../contexts/auth.context'
 import postService from "../../../services/posts.service";
 
 export default function UserPublish ({ fetchTimeline }) {
 
+  const { auth } = useContext(AuthContext);
   const [disabled, setDisabled] = useState(false);
   const [formData, setFormData] = useState({ URL: "", description: "" });
 
@@ -26,7 +24,7 @@ export default function UserPublish ({ fetchTimeline }) {
     e.preventDefault();
     setDisabled(true);
 
-    postService.createPost(formData)
+    postService.createPost(formData, auth.authToken)
       .then(() => {
         setDisabled(false);
         setFormData({ URL: "", description: "" });
@@ -41,7 +39,7 @@ export default function UserPublish ({ fetchTimeline }) {
   return (
     <Container>
       <LeftContent>
-        <img src={kirby} alt="profile" />
+        <img src={auth.imageURL} alt="profile" />
       </LeftContent>
       <RightContent>
         <h3>What are you going to share today?</h3>

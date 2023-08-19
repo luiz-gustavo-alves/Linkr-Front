@@ -2,14 +2,18 @@ import {
   Posts
 } from "../../components";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 import userService from "../../services/user.service";
+import { AuthContext } from "../../contexts/auth.context";
 
 export default function Home() {
 
+  const { auth, isLogged } = useContext(AuthContext);
   const { fetch } = useFetchTimeline();
 
+  const navigate = useNavigate();
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
     title: "Timeline",
@@ -19,7 +23,12 @@ export default function Home() {
 
   useEffect(() => {
 
-    userService.getTimelinePosts()
+    if (!isLogged()) {
+      navigate("/");
+      return;
+    }
+
+    userService.getTimelinePosts(auth.authToken)
       .then(res => {
 
         if (res.data.length === 0) {

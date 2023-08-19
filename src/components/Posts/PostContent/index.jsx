@@ -18,10 +18,13 @@ import {
 
 import URLContent from "../URLContent";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import postService from "../../../services/posts.service";
+import { AuthContext } from "../../../contexts/auth.context";
 
 export default function PostContent({ data, fetchTimeline }) {
+
+  const { auth } = useContext(AuthContext);
 
   const [disabled, setDisabled] = useState(false);
   const [editPost, setEditPost] = useState(false);
@@ -50,7 +53,7 @@ export default function PostContent({ data, fetchTimeline }) {
         URL: formData.URL
       }
 
-      postService.updatePost(payload, formData.postID)
+      postService.updatePost(payload, formData.postID, auth.authToken)
         .then(() => {
           setEditPost(false);
           setDisabled(false);

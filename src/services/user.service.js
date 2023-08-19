@@ -1,8 +1,9 @@
 import API from "./api";
 import { createConfig } from "./api";
 
-function getTimelinePosts () {
-    return API.get("/timeline");
+function getTimelinePosts (token) {
+    const config = createConfig(token);
+    return API.get("/timeline", config);
 }
 
 function getPostsByUser (id) {
