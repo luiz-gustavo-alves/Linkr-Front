@@ -13,6 +13,10 @@ const PostContainer = styled.div`
     border-radius: 10px;
     margin-bottom: 40px;
     padding: 20px;
+
+    @media (max-width: 938px) {
+        border-radius: 0;
+    }
 `;
 
 const LeftPostContainer = styled.div`
@@ -135,6 +139,7 @@ const DeleteIcon = styled(BsTrash)`
 const PostDescription = styled.h3`
 
     font-size: 17px;
+    line-height: 24px;
     color: #B7B7B7;
 `;
 
