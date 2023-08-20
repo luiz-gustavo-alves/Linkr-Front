@@ -30,6 +30,8 @@ const ProfilePicture = styled.img`
     height: 50px;
     border-radius: 25px;
     object-fit: cover;
+    cursor: pointer;
+
 `;
 
 const LikeContainer = styled.div`
@@ -73,7 +75,7 @@ const RightPostTopContent = styled.div`
 `;
 
 const PostTitle = styled.h3`
-
+    cursor: pointer;
     font-size: 18px;
     color: #FFF;
 `;

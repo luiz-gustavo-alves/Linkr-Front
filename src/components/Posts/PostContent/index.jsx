@@ -126,10 +126,14 @@ export default function PostContent({ data, fetchTimeline }) {
 
   }, [editPost]);
 
+  function goToUser(id){
+    navigate(`/user/${id}`);
+  }
+
   return (
     <PostContainer>
       <LeftPostContainer>
-        <ProfilePicture src={data.user.img} />
+        <ProfilePicture src={data.user.img} onClick={()=> goToUser(data.user.id)} />
         <LikeContainer>
           <LikeIcon /> 
           <LikeCounter>{data.likes} likes</LikeCounter>
@@ -138,7 +142,7 @@ export default function PostContent({ data, fetchTimeline }) {
 
       <RightPostContainer>
         <RightPostTopContent>
-          <PostTitle>{data.user.name}</PostTitle>
+          <PostTitle onClick={()=> goToUser(data.user.id)} >{data.user.name}</PostTitle>
           {data.postOwner &&
               <IconsContainer>
                 <EditIcon onClick={toggleEditPost}/> 
