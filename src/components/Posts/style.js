@@ -11,6 +11,10 @@ const Content = styled.div`
     flex-direction: column;
     width: 938px;
     margin: 0 auto;
+
+    @media (max-width: 938px) {
+      width: 100%;
+    }
 `;
 
 const Title = styled.h2`
@@ -19,6 +23,11 @@ const Title = styled.h2`
     font-weight: 700;
     color: #FFF;
     margin-bottom: 50px;
+    
+    @media (max-width: 938px) {
+      font-size: 33px;
+      padding: 0 20px;
+    }
 `;
 
 export {
@@ -35,6 +44,10 @@ export const PostsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 612px;
+
+  @media (max-width: 938px) {
+    width: 100%;
+  }
 `
 export const HashtagsContainer = styled.div`
   display: flex;
@@ -45,6 +58,10 @@ export const HashtagsContainer = styled.div`
   color: #FFFFFF;
   border-radius: 15px;
   margin-left: 25px;
+
+  @media (max-width: 938px) {
+    display: none;
+  }
 `
 export const DivH1 = styled.div`
   width: 301px;
