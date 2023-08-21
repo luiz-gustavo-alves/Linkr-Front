@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Container, Title, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
+import { Container, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
 import { useNavigate } from 'react-router-dom'
 import authService from '../../services/auth.service'
 import { AuthContext } from '../../contexts/auth.context'
