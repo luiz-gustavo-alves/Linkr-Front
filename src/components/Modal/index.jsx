@@ -43,8 +43,8 @@ export default function Modal({ setOpenModal, token, postID }) {
           <>
           <Title>Are you sure you want to delete this post?</Title>
             <ButtonsContainer>
-              <ReturnButton onClick={() => setOpenModal(false)}>No, go back</ReturnButton>
-              <DeleteButton onClick={deletePost}>Yes, delete it</DeleteButton>
+              <ReturnButton data-test="cancel" onClick={() => setOpenModal(false)}>No, go back</ReturnButton>
+              <DeleteButton data-test="confirm" onClick={deletePost}>Yes, delete it</DeleteButton>
             </ButtonsContainer>
           </>
         }

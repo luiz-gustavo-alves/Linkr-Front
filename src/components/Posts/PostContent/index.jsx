@@ -139,7 +139,7 @@ export default function PostContent({ data, fetchTimeline }) {
   }
 
   return (
-    <PostContainer>
+    <PostContainer data-test="post">
 
       {openModal && 
         <Modal 
@@ -152,18 +152,18 @@ export default function PostContent({ data, fetchTimeline }) {
       <LeftPostContainer>
         <ProfilePicture src={data.user.img} onClick={()=> goToUser(data.user.id)} />
         <LikeContainer>
-          <LikeIcon /> 
-          <LikeCounter>{data.likes} likes</LikeCounter>
+          <LikeIcon data-test="like-btn" /> 
+          <LikeCounter data-test="counter">{data.likes} likes</LikeCounter>
         </LikeContainer>
       </LeftPostContainer>
 
       <RightPostContainer>
         <RightPostTopContent>
-          <PostTitle onClick={()=> goToUser(data.user.id)} >{data.user.name}</PostTitle>
+          <PostTitle data-test="username" onClick={()=> goToUser(data.user.id)} >{data.user.name}</PostTitle>
           {data.postOwner &&
               <IconsContainer>
-                <EditIcon onClick={toggleEditPost}/> 
-                <DeleteIcon onClick={() => handleModal(data.postID)}/>
+                <EditIcon data-test="edit-btn" onClick={toggleEditPost}/> 
+                <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)}/>
               </IconsContainer>
           }
         </RightPostTopContent>
@@ -172,6 +172,7 @@ export default function PostContent({ data, fetchTimeline }) {
               <textarea
                 type="text"
                 name="description"
+                data-test="edit-input"
                 value={formData.description}
                 onChange={handleChange}
                 disabled={disabled}
@@ -181,7 +182,7 @@ export default function PostContent({ data, fetchTimeline }) {
               />
             </EditPostForm>
           :
-          <PostDescription>{postDescriptionParser(data.description)}</PostDescription>
+          <PostDescription data-test="description" >{postDescriptionParser(data.description)}</PostDescription>
         }
         <URLContent data={data} />
       </RightPostContainer>
