@@ -39,10 +39,10 @@ export default function Header() {
                <SearchInput />
             </li>
             <li onClick={() => setToggleLogout(!toggleLogout)} ref={menuRef}>
-               <MdKeyboardArrowDown className="icon" />
-               <ProfilePicture src={userPicture} />
+               <MdKeyboardArrowDown data-test="menu" className="icon" />
+               <ProfilePicture data-test="avatar" src={userPicture} />
                <div>
-                  <span onClick={logout}>Logout</span>
+                  <span data-test="logout" onClick={logout}>Logout</span>
                </div>
             </li>
          </ul>

@@ -69,6 +69,7 @@ export default function SearchInput() {
          <DebounceInput
             className="searchInput"
             placeholder="Search for people"
+            data-test="search"
             minLength={3}
             debounceTimeout={300}
             value={states.searchInput ?? ''}
@@ -84,6 +85,7 @@ export default function SearchInput() {
                states.result.map((user) => {
                   return (
                      <UserSearchResult
+                        data-test="user-search"
                         key={user.id}
                         id={user.id}
                         image={user.imageURL}
