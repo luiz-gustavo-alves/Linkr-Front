@@ -6,7 +6,7 @@ export default function UserSearchResult({ id, image, username, states, setState
    const navigate = useNavigate()
 
    return (
-      <Container
+      <Container data-test="user-search"
          onClick={() => {
             setStates({ ...states, result: [], searchInput: null, searchString: '' })
             navigate(`/user/${id}`)

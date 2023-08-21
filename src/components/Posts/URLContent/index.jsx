@@ -18,8 +18,8 @@ export default function URLContent({ data }) {
   const image = (data.URL_image !== "") ? data.URL_image : placeholder;
 
   return (
-    <URLContainer data-test="link">
-      <a href={data.URL} title={data.URL_title} target="blank">
+    <URLContainer>
+      <a data-test="link" href={data.URL} title={data.URL_title} target="blank">
         <URLContentContainer>
           <URLDetails>
             <URLTitle>{data.URL_title}</URLTitle>
