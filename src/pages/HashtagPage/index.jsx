@@ -1,6 +1,3 @@
-import postService from "../../services/posts.service";
-import userService from "../../services/user.service";
-
 import {
   Posts
 } from "../../components";
@@ -23,7 +20,6 @@ export default function HashtagPage() {
   useEffect(() => {
     hashService.hashtagPosts(hashtag)
     .then(res => {
-      console.log(res.data[0]);
       setPostData(res.data[0].posts);
       setPostDetails((prevDetails) => ({
         ...prevDetails,
@@ -31,7 +27,11 @@ export default function HashtagPage() {
       }));
       
     })
-    .catch((err) => console.log(err));
+    .catch(() => setPostDetails({
+      ...postDetails, 
+      defaultMessage:"An error occured while trying to fetch the posts, please refresh the page"
+    }));
+
   }, [hashtag]);
 
   return (
