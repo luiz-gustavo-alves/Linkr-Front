@@ -35,7 +35,7 @@ export default function Home() {
           setPostDetails({...postDetails, defaultMessage: "There are no posts yet"});
         }
         setPostData(res.data);
-        /* console.log(res.data) */
+        console.log(res.data)
       })
       .catch(() => setPostDetails({
           ...postDetails, 
@@ -47,6 +47,7 @@ export default function Home() {
   return (
     <Posts 
       data={postData}
+      setPostData={setPostData}
       details={postDetails}
     />
   )
