@@ -34,6 +34,7 @@ export default function Posts({ data, details }) {
     hashService.hashtagsList()
       .then(res => {
         setHashtags(res.data);
+        /* console.log(res.data) */
       })
       .catch((err) => console.log(err));
     
