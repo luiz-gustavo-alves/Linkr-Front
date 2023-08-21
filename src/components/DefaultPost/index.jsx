@@ -7,7 +7,7 @@ export default function DefaultPost({ message }) {
 
   return (
     <Container>
-      <DefaultMessage>
+      <DefaultMessage data-test="message">
         {message}
       </DefaultMessage>
     </Container>

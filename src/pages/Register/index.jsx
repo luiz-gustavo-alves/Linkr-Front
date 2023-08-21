@@ -67,6 +67,7 @@ export default function Register() {
             <Input
                type="email"
                placeholder="e-mail"
+               data-test="email"
                disabled={states.disabledInput}
                autoComplete="new-password"
                value={form.email}
@@ -75,6 +76,7 @@ export default function Register() {
             <Input
                type="password"
                placeholder="password"
+               data-test="password"
                disabled={states.disabledInput}
                value={form.password}
                onChange={handleChangeForm('password')}
@@ -82,6 +84,7 @@ export default function Register() {
             <Input
                type="text"
                placeholder="username"
+               data-test="username" 
                disabled={states.disabledInput}
                value={form.name}
                onChange={handleChangeForm('name')}
@@ -90,16 +93,17 @@ export default function Register() {
             <Input
                type="text"
                placeholder="picture url"
+               data-test="picture-url" 
                disabled={states.disabledInput}
                value={form.imageURL}
                onChange={handleChangeForm('imageURL')}
             />
 
-            <InputButton type="submit" disabled={states.disabledInput}>
+            <InputButton type="submit" data-test="sign-up-btn" disabled={states.disabledInput}>
                {loading} Sign Up
             </InputButton>
 
-            <Link onClick={() => navigate('/')}>Switch back to log in</Link>
+            <Link data-test="login-link" onClick={() => navigate('/')}>Switch back to log in</Link>
          </Form>
       </Container>
    )
