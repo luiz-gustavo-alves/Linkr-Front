@@ -55,7 +55,7 @@ export default function Login() {
    }
 
    function handleChangeForm(e) {
-      setForm({ ...form, [e.target.type]: e.target.value })
+      setForm({ ...form, [e.target.name]: e.target.value })
    }
 
    return (
@@ -64,9 +64,10 @@ export default function Login() {
 
          <Form onSubmit={handleSignIn}>
             <Input
-               type="email"
+               type="text"
                placeholder="e-mail"
                data-test="email"
+               name="email"
                disabled={states.disabledInput}
                value={form.email}
                onChange={handleChangeForm}
@@ -75,6 +76,7 @@ export default function Login() {
                type="password"
                placeholder="password"
                data-test="password"
+               name="password"
                disabled={states.disabledInput}
                value={form.password}
                onChange={handleChangeForm}
