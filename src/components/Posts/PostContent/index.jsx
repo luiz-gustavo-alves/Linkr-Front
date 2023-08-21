@@ -17,6 +17,7 @@ import {
 } from "./style";
 
 import URLContent from "../URLContent";
+import Modal from "../../Modal";
 
 import React, { useState, useEffect, useContext } from "react";
 import postService from "../../../services/posts.service";
@@ -29,11 +30,18 @@ export default function PostContent({ data, fetchTimeline }) {
 
   const [disabled, setDisabled] = useState(false);
   const [editPost, setEditPost] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [currentPostID, setCurrentPostID] = useState(false);
   const [formData, setFormData] = useState({
     description: data.description,
     URL: data.URL,
     postID: data.postID
   });
+
+  function handleModal (postID) {
+    setCurrentPostID(postID);
+    setOpenModal(true);
+  }
 
   function toggleEditPost () {
     (editPost) ? setEditPost(false) : setEditPost(true);
@@ -126,10 +134,23 @@ export default function PostContent({ data, fetchTimeline }) {
 
   }, [editPost]);
 
+  function goToUser(id){
+    navigate(`/user/${id}`);
+  }
+
   return (
     <PostContainer>
+
+      {openModal && 
+        <Modal 
+          setOpenModal={setOpenModal} 
+          token={auth.authToken}
+          postID={currentPostID}
+        />
+      }
+
       <LeftPostContainer>
-        <ProfilePicture src={data.user.img} />
+        <ProfilePicture src={data.user.img} onClick={()=> goToUser(data.user.id)} />
         <LikeContainer>
           <LikeIcon /> 
           <LikeCounter>{data.likes} likes</LikeCounter>
@@ -138,11 +159,11 @@ export default function PostContent({ data, fetchTimeline }) {
 
       <RightPostContainer>
         <RightPostTopContent>
-          <PostTitle>{data.user.name}</PostTitle>
+          <PostTitle onClick={()=> goToUser(data.user.id)} >{data.user.name}</PostTitle>
           {data.postOwner &&
               <IconsContainer>
                 <EditIcon onClick={toggleEditPost}/> 
-                <DeleteIcon />
+                <DeleteIcon onClick={() => handleModal(data.postID)}/>
               </IconsContainer>
           }
         </RightPostTopContent>

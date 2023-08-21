@@ -25,6 +25,11 @@ const URLDetails = styled.div`
     gap: 15px;
     padding: 20px 15px;
     width: 65%;
+
+    @media (max-width: 420px) {
+        gap: 5px;
+        padding: 10px 8px;
+    }
 `;
 
 const URLTitle = styled.h3`
@@ -40,6 +45,11 @@ const URLDescription = styled.h3`
     line-height: 16px;
     color: #9B9595;
     word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;  
+    text-overflow: ellipsis;
+    overflow: hidden;
 `;
 
 const URL = styled.h3`
