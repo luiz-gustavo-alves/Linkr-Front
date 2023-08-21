@@ -1,27 +1,46 @@
 import { css, styled } from 'styled-components'
 import { AuthContext } from '../../contexts/auth.context'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { ProfilePicture } from '../Posts/PostContent/style'
+import SearchInput from '../SearchInput'
 
 export default function Header() {
-   /* const { logout } = useContext(AuthContext) */
+   const { logout } = useContext(AuthContext)
    const [toggleLogout, setToggleLogout] = useState(false)
+   const [userPicture, setUserPicture] = useState(null)
+   const menuRef = useRef(null)
 
-   useEffect(() => {}, [])
+   const handleDocumentClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+         setToggleLogout(false)
+      }
+   }
+
+   useEffect(() => {
+      const { imageURL } = JSON.parse(localStorage.getItem('auth'))
+      setUserPicture(imageURL)
+   }, [])
+
+   useEffect(() => {
+      document.addEventListener('click', handleDocumentClick)
+      return () => {
+         document.removeEventListener('click', handleDocumentClick)
+      }
+   }, [])
+
    return (
       <Container open={toggleLogout}>
          <ul>
             <li>linkr</li>
             <li>
-               <input type="text" placeholder="Search for people" />
+               <SearchInput />
             </li>
-            <li onClick={() => setToggleLogout(!toggleLogout)}>
+            <li onClick={() => setToggleLogout(!toggleLogout)} ref={menuRef}>
                <MdKeyboardArrowDown className="icon" />
-               <ProfilePicture src="http://a" />
-
+               <ProfilePicture src={userPicture} />
                <div>
-                  <span>Logout</span>
+                  <span onClick={logout}>Logout</span>
                </div>
             </li>
          </ul>
@@ -53,19 +72,8 @@ const Container = styled.div`
             letter-spacing: 2.45px;
          }
 
-         &:nth-child(2) input {
-            width: 563px;
+         &:nth-child(2) {
             height: 45px;
-            border: none;
-            border-radius: 8px;
-            background: #fff;
-            padding: 10px 17px;
-
-            font-size: 19px;
-
-            &::placeholder {
-               color: #c6c6c6;
-            }
          }
 
          &:nth-child(3) {
