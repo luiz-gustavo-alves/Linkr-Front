@@ -66,6 +66,7 @@ export default function Login() {
             <Input
                type="email"
                placeholder="e-mail"
+               data-test="email"
                disabled={states.disabledInput}
                value={form.email}
                onChange={handleChangeForm}
@@ -73,15 +74,16 @@ export default function Login() {
             <Input
                type="password"
                placeholder="password"
+               data-test="password"
                disabled={states.disabledInput}
                value={form.password}
                onChange={handleChangeForm}
             />
-            <InputButton type="submit" disabled={states.disabledInput}>
+            <InputButton type="submit" data-test="login-btn" disabled={states.disabledInput}>
                {loading} Log In
             </InputButton>
 
-            <Link onClick={() => navigate('/sign-up')}>First time? Create an account!</Link>
+            <Link data-test="sign-up-link" onClick={() => navigate('/sign-up')}>First time? Create an account!</Link>
          </Form>
       </Container>
    )

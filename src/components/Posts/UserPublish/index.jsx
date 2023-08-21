@@ -37,7 +37,7 @@ export default function UserPublish ({ fetchTimeline }) {
   }
 
   return (
-    <Container>
+    <Container data-test="publish-box">
       <LeftContent>
         <img src={auth.imageURL} alt="profile" />
       </LeftContent>
@@ -47,6 +47,7 @@ export default function UserPublish ({ fetchTimeline }) {
           <input
             type="text"
             name="URL"
+            data-test="link"
             value={formData.URL}
             onChange={handleChange}
             disabled={disabled}
@@ -55,13 +56,14 @@ export default function UserPublish ({ fetchTimeline }) {
           <textarea
             type="text"
             name="description"
+            data-test="description"
             value={formData.description}
             onChange={handleChange}
             disabled={disabled}
             placeholder="Awesome article about #javascript"
           />
           <FormButtonContainer>
-            <button type="submit" disabled={disabled}>
+            <button type="submit" data-test="publish-btn" disabled={disabled}>
               {disabled ? "Publishing..." : "Publish"}
             </button>
           </FormButtonContainer>
