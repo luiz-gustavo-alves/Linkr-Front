@@ -7,6 +7,7 @@ import userService from '../../services/user.service'
 export default function SearchInput() {
    const [states, setStates] = useState({
       users: [],
+      searchString: '',
       searchInput: null,
       result: [],
       inputRef: useRef(null),
@@ -37,17 +38,16 @@ export default function SearchInput() {
                   result: response.data.filter((user) => {
                      const input = states.searchInput.toLowerCase()
                      const username = user.name.toLowerCase()
-      
+
                      return username.startsWith(input)
                   })
                })
             })
             .catch((error) => console.log(error))
-
-      
    }, [states.searchInput])
 
    useEffect(() => {
+      setStates({ ...states, result: [], searchInput: null })
       const handleClickOutside = (event) => {
          if (
             states.containerRef.current &&
@@ -71,6 +71,7 @@ export default function SearchInput() {
             placeholder="Search for people"
             minLength={3}
             debounceTimeout={300}
+            value={states.searchInput ?? ''}
             onChange={handleChangeSearch}
             onFocus={handleOpenCurrentSearch}
             ref={states.inputRef}
@@ -87,6 +88,8 @@ export default function SearchInput() {
                         id={user.id}
                         image={user.imageURL}
                         username={user.name}
+                        states={states}
+                        setStates={setStates}
                      />
                   )
                })

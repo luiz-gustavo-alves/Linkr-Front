@@ -4,9 +4,11 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { ProfilePicture } from '../Posts/PostContent/style'
 import SearchInput from '../SearchInput'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
    const { logout } = useContext(AuthContext)
+   const navigate = useNavigate()
    const [toggleLogout, setToggleLogout] = useState(false)
    const [userPicture, setUserPicture] = useState(null)
    const menuRef = useRef(null)
@@ -32,7 +34,7 @@ export default function Header() {
    return (
       <Container open={toggleLogout}>
          <ul>
-            <li>linkr</li>
+            <li onClick={() => navigate('/timeline')}>linkr</li>
             <li>
                <SearchInput />
             </li>
@@ -73,6 +75,7 @@ const Container = styled.div`
             font-size: 49px;
             font-weight: 700;
             letter-spacing: 2.45px;
+            cursor: pointer;
          }
 
          &:nth-child(2) {

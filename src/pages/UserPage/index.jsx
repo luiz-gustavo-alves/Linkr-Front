@@ -20,6 +20,7 @@ export default function UserPage() {
   })
 
   useEffect(() => {
+    
     userService.getPostsByUser(id)
     .then(res => {
       console.log(res.data);

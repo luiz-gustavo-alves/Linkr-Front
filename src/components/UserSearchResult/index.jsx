@@ -1,10 +1,15 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 
-export default function UserSearchResult({ id, image, username }) {
+export default function UserSearchResult({ id, image, username, states, setStates }) {
+   const navigate = useNavigate()
+
    return (
       <Container
          onClick={() => {
-            console.log(id)
+            setStates({ ...states, result: [], searchInput: null, searchString: '' })
+            navigate(`/user/${id}`)
          }}
       >
          <img src={image} alt="" />
