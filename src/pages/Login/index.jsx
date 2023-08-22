@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Container, Title, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
+import { Container, Form, Input, InputButton, Link } from '../../assets/styles/Form.style'
 import { useNavigate } from 'react-router-dom'
 import authService from '../../services/auth.service'
 import { AuthContext } from '../../contexts/auth.context'
@@ -55,7 +55,7 @@ export default function Login() {
    }
 
    function handleChangeForm(e) {
-      setForm({ ...form, [e.target.type]: e.target.value })
+      setForm({ ...form, [e.target.name]: e.target.value })
    }
 
    return (
@@ -64,8 +64,10 @@ export default function Login() {
 
          <Form onSubmit={handleSignIn}>
             <Input
-               type="email"
+               type="text"
                placeholder="e-mail"
+               data-test="email"
+               name="email"
                disabled={states.disabledInput}
                value={form.email}
                onChange={handleChangeForm}
@@ -73,15 +75,17 @@ export default function Login() {
             <Input
                type="password"
                placeholder="password"
+               data-test="password"
+               name="password"
                disabled={states.disabledInput}
                value={form.password}
                onChange={handleChangeForm}
             />
-            <InputButton type="submit" disabled={states.disabledInput}>
+            <InputButton type="submit" data-test="login-btn" disabled={states.disabledInput}>
                {loading} Log In
             </InputButton>
 
-            <Link onClick={() => navigate('/sign-up')}>First time? Create an account!</Link>
+            <Link data-test="sign-up-link" onClick={() => navigate('/sign-up')}>First time? Create an account!</Link>
          </Form>
       </Container>
    )

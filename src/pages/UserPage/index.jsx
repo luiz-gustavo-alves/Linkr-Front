@@ -1,4 +1,3 @@
-import postService from "../../services/posts.service";
 import userService from "../../services/user.service";
 
 import {
@@ -14,22 +13,26 @@ export default function UserPage() {
 
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
-    title: "User",
+    title: "",
     userPublish: false,
     defaultMessage: "Loading"
   })
 
   useEffect(() => {
+    
     userService.getPostsByUser(id)
     .then(res => {
-      console.log(res.data);
       setPostData(res.data);
       setPostDetails((prevDetails) => ({
         ...prevDetails,
-        title: res.data[0].user.name
+        title: `${res.data[0].user.name} posts`
       }));
     })
-    .catch((err) => console.log(err));
+    .catch(() => setPostDetails({
+      ...postDetails, 
+      defaultMessage:"An error occured while trying to fetch the posts, please refresh the page"
+    }));
+
   }, []);
 
   return (

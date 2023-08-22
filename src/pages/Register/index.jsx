@@ -39,7 +39,6 @@ export default function Register() {
       authService
          .signUp(form)
          .then((response) => {
-            console.log(response.data)
             navigate('/')
          })
          .catch((error) => {
@@ -53,10 +52,8 @@ export default function Register() {
          })
    }
 
-   function handleChangeForm(str) {
-      return (e) => {
-         setForm({ ...form, [str]: e.target.value })
-      }
+   function handleChangeForm(e) {
+      setForm({ ...form, [e.target.name]: e.target.value })
    }
 
    return (
@@ -65,41 +62,49 @@ export default function Register() {
 
          <Form onSubmit={handleSignUp}>
             <Input
-               type="email"
+               type="text"
                placeholder="e-mail"
+               data-test="email"
+               name="email"
                disabled={states.disabledInput}
                autoComplete="new-password"
                value={form.email}
-               onChange={handleChangeForm('email')}
+               onChange={handleChangeForm}
             />
             <Input
                type="password"
                placeholder="password"
+               data-test="password"
+               name="password"
                disabled={states.disabledInput}
                value={form.password}
-               onChange={handleChangeForm('password')}
+               onChange={handleChangeForm}
             />
             <Input
                type="text"
                placeholder="username"
+               data-test="username"
+               name="name" 
                disabled={states.disabledInput}
                value={form.name}
-               onChange={handleChangeForm('name')}
+               onChange={handleChangeForm}
             />
 
             <Input
                type="text"
                placeholder="picture url"
+               data-test="picture-url" 
+               name="imageURL"
                disabled={states.disabledInput}
                value={form.imageURL}
-               onChange={handleChangeForm('imageURL')}
+               onChange={handleChangeForm}
             />
 
-            <InputButton type="submit" disabled={states.disabledInput}>
+            <InputButton type="submit" data-test="sign-up-btn" disabled={states.disabledInput}>
                {loading} Sign Up
             </InputButton>
 
-            <Link onClick={() => navigate('/')}>Switch back to log in</Link>
+            <Link data-test="login-link" onClick={() => navigate('/')}>Switch back to log in</Link>
          </Form>
       </Container>
    )

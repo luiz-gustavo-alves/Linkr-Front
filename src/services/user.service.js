@@ -18,11 +18,21 @@ function getPostsBySearch (query) {
     return API.get(`/timeline/search/?query=${query}`);
 }
 
+function getUsersBySearch (query) {
+    return API.get(`/timeline/search/users/${query}`);
+}
+
+function postLike (query) {
+    return API.post('/post/like', query);
+}
+
 const userService = {
     getTimelinePosts,
     getPostsByUser,
     getPostsByHashtag,
-    getPostsBySearch
+    getPostsBySearch,
+    getUsersBySearch,
+    postLike
 }
 
 export default userService;

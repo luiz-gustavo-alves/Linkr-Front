@@ -9,11 +9,17 @@ import {
   URLImage
 } from "./style";
 
+import {
+  placeholder
+} from "../../../assets/images";
+
 export default function URLContent({ data }) {
+
+  const image = (data.URL_image !== "") ? data.URL_image : placeholder;
 
   return (
     <URLContainer>
-      <a href={data.URL} title={data.URL_title} target="blank">
+      <a data-test="link" href={data.URL} title={data.URL_title} target="blank">
         <URLContentContainer>
           <URLDetails>
             <URLTitle>{data.URL_title}</URLTitle>
@@ -21,7 +27,7 @@ export default function URLContent({ data }) {
             <URL>{data.URL}</URL>
           </URLDetails>
           <URLImageContainer>
-            <URLImage src={data.URL_image} />
+            <URLImage src={image} />
           </URLImageContainer>
         </URLContentContainer>
       </a>

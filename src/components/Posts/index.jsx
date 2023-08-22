@@ -17,10 +17,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 import hashService from "../../services/hash.service";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Posts({ data, details }) {
 
+  const { pathname } = useLocation();
   const { fetchTimeline } = useFetchTimeline();
   const [showPosts, setShowPosts] = useState(false);
 
@@ -33,6 +34,7 @@ export default function Posts({ data, details }) {
     hashService.hashtagsList()
       .then(res => {
         setHashtags(res.data);
+        /* console.log(res.data) */
       })
       .catch((err) => console.log(err));
     
@@ -48,10 +50,20 @@ export default function Posts({ data, details }) {
     navigate(`/hashtag/${cleanedHashtag}`);
   };
 
+  const setTitleDataTest = () => {
+    if (pathname.includes("/hashtag")) {
+      return "hashtag-title";
+    }
+
+    return "";
+  }
+
+  const titleDataTest = setTitleDataTest();
+
   return (
     <Container>
       <Content>
-        <Title>{details.title}</Title>
+        <Title data-test={titleDataTest}>{details.title}</Title>
         <Body>
           <PostsContainer>
           {details.userPublish && 
@@ -67,13 +79,13 @@ export default function Posts({ data, details }) {
             ))
           }
           </PostsContainer>
-          <HashtagsContainer>
+          <HashtagsContainer data-test="trending">
             <DivH1>
               <h1>trending</h1>
             </DivH1>
             <ListHashtags>
               {hashtags.map((hash)=> 
-                <h2 onClick={() => navigateToHashtag(hash.hashtag)} key={hash.id}> {hash.hashtag} </h2>
+                <h2 data-test="hashtag" onClick={() => navigateToHashtag(hash.hashtag)} key={hash.id}> {hash.hashtag} </h2>
               )}
               
             </ListHashtags>
