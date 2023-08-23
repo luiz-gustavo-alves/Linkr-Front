@@ -54,6 +54,7 @@ export default function Home() {
         } else {
 
           const fetchPostData = res.data;
+          console.log(fetchPostData);
           if (fetchPostData[0].createdAt > postData[0].createdAt) {
             
             userService.countTimelinePosts()
