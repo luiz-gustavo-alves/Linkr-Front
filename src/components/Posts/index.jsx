@@ -13,6 +13,7 @@ import {
 import UserPublish from "./UserPublish";
 import DefaultPost from "../DefaultPost"
 import PostContent from "./PostContent";
+import TitleUser from "./TitleUser";
 import React from "react";
 
 import { useEffect, useState } from "react";
@@ -27,6 +28,7 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
   const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { pathname } = useLocation();
   const [showPosts, setShowPosts] = useState(false);
+  const [photo, setPhoto] = useState();
 
   useEffect(() => {
 
@@ -34,10 +36,12 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
       return;
     }
 
+    setPhoto(data[0].user.img);
+    
+
     hashService.hashtagsList()
       .then(res => {
         setHashtags(res.data);
-        /* console.log(res.data) */
       })
       .catch((err) => console.log(err));
     
@@ -62,18 +66,22 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
 
   const setTitleDataTest = () => {
     if (pathname.includes("/hashtag")) {
-      return "hashtag-title";
+        return "hashtag-title";
     }
-
     return "";
-  }
+}
 
-  const titleDataTest = setTitleDataTest();
+  const titleDataTest = setTitleDataTest(); 
 
   return (
     <Container>
       <Content>
-        <Title data-test={titleDataTest}>{details.title}</Title>
+        {
+          (pathname == '/timeline' || pathname.startsWith('/hashtag')) ?
+          <Title data-test={titleDataTest}>{details.title}</Title>
+          :
+          <TitleUser name={details.title} photo={photo} />
+        }
         <Body>
           <PostsContainer>
 
