@@ -153,6 +153,8 @@ export default function PostContent({ data }) {
     .then(response => {
       setLiked(response.data.liked)
       setUsersLiked([...usersLiked, data.lastLikes])
+      updatePostOption("like");
+      fetchTimeline();
     })
     .catch(error => console.log(error))
     
