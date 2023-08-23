@@ -26,13 +26,27 @@ function postLike (query) {
     return API.post('/post/like', query);
 }
 
+function postFollow (token, id) {
+    const body = {follower: id}
+    const config = createConfig(token);
+    return API.post('/follow', body, config);
+}
+
+function checkFollow (token, id) {
+    console.log("AQUI ESTOU EU")
+    const config = createConfig(token);
+    return API.get(`/follow/${id}`, config);
+}
+
 const userService = {
     getTimelinePosts,
     getPostsByUser,
     getPostsByHashtag,
     getPostsBySearch,
     getUsersBySearch,
-    postLike
+    postLike,
+    postFollow,
+    checkFollow
 }
 
 export default userService;
