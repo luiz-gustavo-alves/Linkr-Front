@@ -30,10 +30,36 @@ const Title = styled.h2`
     }
 `;
 
+const NewPostsContainer = styled.div`
+
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+
+    button {
+        width: 100%;
+        height: 60px;
+        border: none;
+        outline: none;
+        background-color: #1877F2;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #FFF;
+        cursor: pointer;
+        transition: all .2s;
+
+        &:hover {
+            opacity: 0.7
+        }
+    }
+`;
+
 export {
     Container,
     Content,
-    Title
+    Title,
+    NewPostsContainer
 }
 
 export const Body = styled.div`

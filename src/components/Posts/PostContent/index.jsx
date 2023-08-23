@@ -25,9 +25,12 @@ import postService from '../../../services/posts.service'
 import { AuthContext } from '../../../contexts/auth.context'
 import { useNavigate } from 'react-router-dom'
 import userService from '../../../services/user.service'
+import useFetchTimeline from "../../../hooks/useFetchTimeline";
 
-export default function PostContent({ data, setPostData, fetchTimeline }) {
+export default function PostContent({ data }) {
+
    const { auth } = useContext(AuthContext)
+   const { fetchTimeline, updatePostOption } = useFetchTimeline();
 
    const [disabled, setDisabled] = useState(false)
    const [editPost, setEditPost] = useState(false)
@@ -65,14 +68,15 @@ export default function PostContent({ data, setPostData, fetchTimeline }) {
          postService
             .updatePost(payload, formData.postID, auth.authToken)
             .then(() => {
-               setEditPost(false)
-               setDisabled(false)
+               setEditPost(false);
+               setDisabled(false);
                setFormData({
                   description: payload.description,
                   URL: payload.URL,
                   postID: formData.postID
-               })
-               fetchTimeline()
+               });
+               fetchTimeline();
+               updatePostOption("edit");
             })
             .catch(() => {
                alert('Houve um erro ao atualizar a postagem')
@@ -157,7 +161,12 @@ export default function PostContent({ data, setPostData, fetchTimeline }) {
    return (
       <PostContainer data-test="post">
          {openModal && (
-            <Modal setOpenModal={setOpenModal} token={auth.authToken} postID={currentPostID} />
+            <Modal 
+               setOpenModal={setOpenModal} 
+               updatePostOption={updatePostOption}
+               token={auth.authToken} 
+               postID={currentPostID} 
+            />
          )}
 
          <LeftPostContainer>
@@ -180,7 +189,7 @@ export default function PostContent({ data, setPostData, fetchTimeline }) {
                <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
                   {data.user.name}
                </PostTitle>
-               {data.postOwner && (
+               {data.postOwner === "1" && (
                   <IconsContainer>
                      <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
                      <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)} />

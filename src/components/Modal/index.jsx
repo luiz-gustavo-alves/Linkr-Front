@@ -13,7 +13,7 @@ import { RotatingLines } from 'react-loader-spinner'
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 import postService from "../../services/posts.service";
 
-export default function Modal({ setOpenModal, token, postID }) {
+export default function Modal({ setOpenModal, updatePostOption, token, postID }) {
 
   const [loading, setLoading] = useState(false);
   const { fetchTimeline } = useFetchTimeline();
@@ -27,6 +27,7 @@ export default function Modal({ setOpenModal, token, postID }) {
         setOpenModal(false);
         setLoading(false);
         fetchTimeline();
+        updatePostOption("delete");
       })
       .catch(() => {
         alert("Não foi possível excluir a postagem.");
