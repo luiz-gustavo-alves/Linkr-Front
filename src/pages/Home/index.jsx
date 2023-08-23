@@ -25,6 +25,7 @@ export default function Home() {
 
   const navigate = useNavigate();
   const [newPosts, setNewPosts] = useState({
+    data: null,
     value: false,
     counter: 0
   });
@@ -53,14 +54,21 @@ export default function Home() {
 
         /* No posts in Database */
         if (res.data.length === 0) {
-          setPostDetails({...postDetails, defaultMessage: "There are no posts yet"});
+          setPostDetails({...postDetails, 
+          defaultMessage: "You don't follow anyone yet. Search for new friends!"});
         }
 
         /* Auto fetch posts if first timeline access or publish/update/delete/refresh posts */
         if (postData === null || postOption !== null) {
           setPostData(res.data);
+          setNewPosts({
+            data: res.data,
+            value: false,
+            counter: 0
+          });
           updatePostOption(null);
 
+          /* Count all TimelinePosts */
           userService.countTimelinePosts()
             .then(res => {
               const { counter } = res.data;
@@ -80,18 +88,30 @@ export default function Home() {
 
           /* New posts in the timeline */
           else if (fetchPostData[0].createdAt > postData[0].createdAt) {
+            const hashTable = {};
+            for (let i = 0; i < newPosts.data.length; i++) {
+              const postID = newPosts.data[i].postID;
+              hashTable[postID] = true;
+            }
 
-            userService.countTimelinePosts()
-              .then(res => {
+            const newData = [];
+            for (let i = 0; i < fetchPostData.length; i++) {
+              const postID = fetchPostData[i].postID;
+              if (!hashTable[postID]) {
+                newData.push(fetchPostData[i]);
+              } else {
+                break;
+              }
+            }
 
-                const { counter } = res.data;
+            if (newData.length > 0) {
 
-                setNewPosts({
-                  value: true,
-                  counter: counter - postData.length
-                });
-              })
-              .catch(err => console.log(err));
+              setNewPosts({
+                data: [...newData, ...newPosts.data],
+                value: true,
+                counter: newPosts.counter + newData.length
+              });
+            }
           }
         }
       })
@@ -111,15 +131,9 @@ export default function Home() {
 
   function fetchNewPosts() {
 
-    const newLimit = limit + 10;
-    console.log(newLimit);
-    updateLimit(newLimit);
-    setNewPosts({
-      value: false,
-      counter: newPosts.counter - newLimit
-    });
-    userService.getTimelinePosts(auth.authToken, newLimit)
-      .then(res => setPostData(res.data));
+    updateLimit(limit + 10);
+    updatePostOption("refresh");
+    fetchTimeline();
   }
 
   return (
@@ -128,7 +142,6 @@ export default function Home() {
         data={postData}
         details={postDetails}
         newPosts={newPosts}
-        setNewPosts={setNewPosts}
       />
       {postData && 
         <InfiniteScroll

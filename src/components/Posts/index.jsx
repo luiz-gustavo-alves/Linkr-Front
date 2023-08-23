@@ -23,7 +23,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useLimit from "../../hooks/useLimit";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 
-export default function Posts({ data, details, newPosts, setNewPosts }) {
+export default function Posts({ data, details, newPosts }) {
 
   const { updateLimit } = useLimit();
   const { fetchTimeline, updatePostOption } = useFetchTimeline();
@@ -55,10 +55,6 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
 
   const getNewTimelinePosts = () => {
     updateLimit(newPosts.counter + data.length);
-    setNewPosts({
-      value: false,
-      counter: 0
-    });
     updatePostOption("refresh");
     fetchTimeline();
   }
