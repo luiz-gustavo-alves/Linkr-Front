@@ -1,9 +1,15 @@
 import {
+  Loader,
+  LoaderTitle
+} from "./style";
+
+import {
   Posts
 } from "../../components";
 
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 import useLimit from "../../hooks/useLimit.js";
 import userService from "../../services/user.service";
@@ -129,9 +135,20 @@ export default function Home() {
           dataLength={postData.length} 
           next={fetchNewPosts}
           hasMore={(postData.length !== postCounter)}
-          loader={<h4>Loading...</h4>}
+          loader={
+            <Loader>
+              <RotatingLines
+                strokeColor="#fff"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="60"
+              />
+              <LoaderTitle>Loading more posts...</LoaderTitle>
+            </Loader>
+          }
         />
       }
     </>
   )
 }
+

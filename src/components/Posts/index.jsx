@@ -7,7 +7,8 @@ import {
   ListHashtags,
   PostsContainer,
   Title,
-  NewPostsContainer
+  NewPostsContainer,
+  RefreshIcon
 } from "./style";
 
 import UserPublish from "./UserPublish";
@@ -95,6 +96,7 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
           {newPosts.value &&
             <NewPostsContainer>
               <button onClick={getNewTimelinePosts}>{newPosts.counter} new posts, load more!</button>
+              <RefreshIcon />
             </NewPostsContainer>
           }
 

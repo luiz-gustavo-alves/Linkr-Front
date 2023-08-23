@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BiRefresh } from 'react-icons/bi';
 
 const Container = styled.main`
 
@@ -53,13 +54,30 @@ const NewPostsContainer = styled.div`
             opacity: 0.7
         }
     }
+    
+    position: relative;
+`;
+
+const RefreshIcon = styled(BiRefresh)`
+
+  color: #fff;
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  top: 14px;
+  right: 160px;
+
+  @media (max-width: 938px) {
+      right: 14px;
+    }
 `;
 
 export {
     Container,
     Content,
     Title,
-    NewPostsContainer
+    NewPostsContainer,
+    RefreshIcon
 }
 
 export const Body = styled.div`
