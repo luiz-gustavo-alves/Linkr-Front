@@ -54,7 +54,10 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
 
   const getNewTimelinePosts = () => {
     updateLimit(newPosts.counter + data.length);
-    setNewPosts(false);
+    setNewPosts({
+      value: false,
+      counter: 0
+    });
     updatePostOption("refresh");
     fetchTimeline();
   }
