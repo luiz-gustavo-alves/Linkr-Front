@@ -19,10 +19,12 @@ import { useEffect, useState } from "react";
 import hashService from "../../services/hash.service";
 import { useLocation, useNavigate } from "react-router-dom";
 import useLimit from "../../hooks/useLimit";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function Posts({ data, details, newPosts, setNewPosts }) {
 
   const { updateLimit } = useLimit();
+  const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { pathname } = useLocation();
   const [showPosts, setShowPosts] = useState(false);
 
@@ -49,6 +51,8 @@ export default function Posts({ data, details, newPosts, setNewPosts }) {
   const getNewTimelinePosts = () => {
     updateLimit(newPosts.counter + data.length);
     setNewPosts(false);
+    updatePostOption("refresh");
+    fetchTimeline();
   }
 
   const navigateToHashtag = (hashtag) => {

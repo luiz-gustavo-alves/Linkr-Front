@@ -13,7 +13,7 @@ export default function Home() {
 
   const { auth, isLogged } = useContext(AuthContext);
   const { limit, resetLimit } = useLimit();
-  const { fetch, fetchTimeline, option, updatePostOption } = useFetchTimeline();
+  const { fetch, fetchTimeline, postOption, updatePostOption } = useFetchTimeline();
 
   const navigate = useNavigate();
   const [newPosts, setNewPosts] = useState({
@@ -47,14 +47,20 @@ export default function Home() {
           setPostDetails({...postDetails, defaultMessage: "There are no posts yet"});
         }
 
-        if (postData === null || option !== null) {
+        if (postData === null || postOption !== null) {
           setPostData(res.data);
           updatePostOption(null);
 
         } else {
 
           const fetchPostData = res.data;
-          console.log(fetchPostData);
+
+          /* User deleted a post */
+          if (fetchPostData[0].createdAt < postData[0].createdAt) {
+            setPostData(res.data);
+          }
+
+          /* New posts in the timeline */
           if (fetchPostData[0].createdAt > postData[0].createdAt) {
             
             userService.countTimelinePosts()
@@ -82,8 +88,6 @@ export default function Home() {
         return () => clearInterval(interval);
 
   }, [fetch]);
-
-  console.log(postData);
 
   return (
     <Posts
