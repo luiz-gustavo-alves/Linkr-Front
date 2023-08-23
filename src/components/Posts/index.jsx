@@ -6,24 +6,28 @@ import {
   HashtagsContainer,
   ListHashtags,
   PostsContainer,
-  Title
+  Title,
+  NewPostsContainer,
+  RefreshIcon
 } from "./style";
 
 import UserPublish from "./UserPublish";
 import DefaultPost from "../DefaultPost"
 import PostContent from "./PostContent";
+import TitleUser from "./TitleUser";
 import React from "react";
 
 import { useEffect, useState } from "react";
-import useFetchTimeline from "../../hooks/useFetchTimeline";
 import hashService from "../../services/hash.service";
 import { useLocation, useNavigate } from "react-router-dom";
-import TitleUser from "./TitleUser";
+import useLimit from "../../hooks/useLimit";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
-export default function Posts({ data, details}) {
+export default function Posts({ data, details, newPosts }) {
 
+  const { updateLimit } = useLimit();
+  const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { pathname } = useLocation();
-  const { fetchTimeline } = useFetchTimeline();
   const [showPosts, setShowPosts] = useState(false);
   const [photo, setPhoto] = useState();
 
@@ -48,6 +52,12 @@ export default function Posts({ data, details}) {
 
   const [hashtags, setHashtags] = useState([{id:'',hashtag:'',cont:''}]);
   const navigate = useNavigate();
+
+  const getNewTimelinePosts = () => {
+    updateLimit(newPosts.counter + data.length);
+    updatePostOption("refresh");
+    fetchTimeline();
+  }
 
   const navigateToHashtag = (hashtag) => {
     const cleanedHashtag = hashtag.replace(/^#/, '');
@@ -74,8 +84,16 @@ export default function Posts({ data, details}) {
         }
         <Body>
           <PostsContainer>
+
           {details.userPublish && 
-            <UserPublish fetch={fetch} fetchTimeline={fetchTimeline} />
+            <UserPublish />
+          }
+
+          {newPosts.value &&
+            <NewPostsContainer>
+              <button onClick={getNewTimelinePosts}>{newPosts.counter} new posts, load more!</button>
+              <RefreshIcon />
+            </NewPostsContainer>
           }
 
           {!showPosts && 
@@ -83,7 +101,8 @@ export default function Posts({ data, details}) {
           }
 
           {showPosts && data.map((data) => (
-              <PostContent key={data.postID} data={data} fetchTimeline={fetchTimeline} />
+              <PostContent key={data.postID} data={data} 
+              />
             ))
           }
           </PostsContainer>

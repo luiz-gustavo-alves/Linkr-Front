@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BiRefresh } from 'react-icons/bi';
 
 const Container = styled.main`
 
@@ -30,10 +31,53 @@ const Title = styled.h2`
     }
 `;
 
+const NewPostsContainer = styled.div`
+
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+
+    button {
+        width: 100%;
+        height: 60px;
+        border: none;
+        outline: none;
+        background-color: #1877F2;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #FFF;
+        cursor: pointer;
+        transition: all .2s;
+
+        &:hover {
+            opacity: 0.7
+        }
+    }
+    
+    position: relative;
+`;
+
+const RefreshIcon = styled(BiRefresh)`
+
+  color: #fff;
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  top: 14px;
+  right: 160px;
+
+  @media (max-width: 938px) {
+      right: 14px;
+    }
+`;
+
 export {
     Container,
     Content,
-    Title
+    Title,
+    NewPostsContainer,
+    RefreshIcon
 }
 
 export const Body = styled.div`

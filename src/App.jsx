@@ -21,7 +21,8 @@ import { AuthProvider } from './contexts/auth.context'
 import { FormsProvider } from './contexts/forms.context'
 
 import {
-  FetchTimelineProvider
+  FetchTimelineProvider,
+  LimitProvider
 } from "./contexts"
 
 import './assets/styles/reset.css'
@@ -43,15 +44,17 @@ export default function App() {
      <AuthProvider>
       <FormsProvider>
         <FetchTimelineProvider>
-          {showHeader(pathname) && <Header />}
-          <Routes>
-            <Route path="/" element={<Login />}></Route>
-            <Route path="/sign-up" element={<Register />}></Route>
-            <Route path="/timeline" element={<Home />}></Route>
-            <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
-            <Route path="/user/:id" element={<UserPage />}></Route>
-            <Route path="*" element={<Navigate to="/timeline" />}></Route>
-          </Routes>
+          <LimitProvider>
+            {showHeader(pathname) && <Header />}
+            <Routes>
+              <Route path="/" element={<Login />}></Route>
+              <Route path="/sign-up" element={<Register />}></Route>
+              <Route path="/timeline" element={<Home />}></Route>
+              <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
+              <Route path="/user/:id" element={<UserPage />}></Route>
+              <Route path="*" element={<Navigate to="/timeline" />}></Route>
+            </Routes>
+          </LimitProvider>
         </FetchTimelineProvider>
       </FormsProvider>
    </AuthProvider>

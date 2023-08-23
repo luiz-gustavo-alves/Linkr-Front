@@ -9,9 +9,11 @@ import {
 import { useContext, useState } from "react";
 import { AuthContext } from '../../../contexts/auth.context'
 import postService from "../../../services/posts.service";
+import useFetchTimeline from "../../../hooks/useFetchTimeline";
 
-export default function UserPublish ({ fetchTimeline }) {
-
+export default function UserPublish() {
+  
+  const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { auth } = useContext(AuthContext);
   const [disabled, setDisabled] = useState(false);
   const [formData, setFormData] = useState({ URL: "", description: "" });
@@ -29,6 +31,7 @@ export default function UserPublish ({ fetchTimeline }) {
         setDisabled(false);
         setFormData({ URL: "", description: "" });
         fetchTimeline();
+        updatePostOption("create");
       })
       .catch(() => {
         alert("Houve um erro ao publicar seu link");
