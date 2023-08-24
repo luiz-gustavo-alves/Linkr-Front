@@ -37,7 +37,6 @@ export default function Home() {
   }) 
 
   useEffect(() => {
-
     if (!isLogged()) {
       navigate("/");
       return;

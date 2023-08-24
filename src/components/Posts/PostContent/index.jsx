@@ -147,9 +147,8 @@ export default function PostContent({ data }) {
    const [liked, setLiked] = useState(false) 
 
    function handleLike(postID) {
-
-    const { authToken } = JSON.parse(localStorage.getItem('auth'))
-    userService.postLike({token: authToken, postID })
+   
+    userService.postLike({token: auth.authToken, postID })
     .then(response => {
       setLiked(response.data.liked)
       setUsersLiked([...usersLiked, data.lastLikes])

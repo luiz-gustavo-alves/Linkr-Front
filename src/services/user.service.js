@@ -22,8 +22,8 @@ function getPostsBySearch (query) {
     return API.get(`/timeline/search/?query=${query}`);
 }
 
-function getUsersBySearch (query) {
-    return API.get(`/timeline/search/users/${query}`);
+function getUsersBySearch ({query, userID}) {
+    return API.get(`/timeline/search/users/${query},${userID}`);
 }
 
 function postLike (query) {

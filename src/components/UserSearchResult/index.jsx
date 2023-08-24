@@ -2,18 +2,32 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 
-export default function UserSearchResult({ id, image, username, states, setStates }) {
+export default function UserSearchResult({ id, image, username, states, setStates, isFollowing }) {
    const navigate = useNavigate()
 
    return (
-      <Container data-test="user-search"
+      <Container
+         data-test="user-search"
          onClick={() => {
             setStates({ ...states, result: [], searchInput: null, searchString: '' })
             navigate(`/user/${id}`)
          }}
       >
-         <img src={image} alt="" />
-         <span>{username}</span>
+         {isFollowing && (
+            <>
+               <img src={image} alt="" />
+               <span>
+                  {username} <span>• following</span>
+               </span>
+            </>
+         )}
+
+         {!isFollowing && (
+            <>
+               <img src={image} alt="" />
+               <span>{username}</span>
+            </>
+         )}
       </Container>
    )
 }
@@ -42,5 +56,9 @@ const Container = styled.div`
       color: #515151;
       font-family: Lato;
       font-size: 19px;
+
+      span {
+         color: #c5c5c5;
+      }
    }
 `
