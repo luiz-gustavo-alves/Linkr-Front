@@ -25,12 +25,13 @@ import postService from '../../../services/posts.service'
 import { AuthContext } from '../../../contexts/auth.context'
 import { useNavigate } from 'react-router-dom'
 import userService from '../../../services/user.service'
-import useFetchTimeline from "../../../hooks/useFetchTimeline";
+import useFetchTimeline from '../../../hooks/useFetchTimeline'
+import { styled } from 'styled-components'
+import { FaRetweet } from 'react-icons/fa'
 
 export default function PostContent({ data }) {
-
    const { auth } = useContext(AuthContext)
-   const { fetchTimeline, updatePostOption } = useFetchTimeline();
+   const { fetchTimeline, updatePostOption } = useFetchTimeline()
 
    const [disabled, setDisabled] = useState(false)
    const [editPost, setEditPost] = useState(false)
@@ -68,15 +69,15 @@ export default function PostContent({ data }) {
          postService
             .updatePost(payload, formData.postID, auth.authToken)
             .then(() => {
-               setEditPost(false);
-               setDisabled(false);
+               setEditPost(false)
+               setDisabled(false)
                setFormData({
                   description: payload.description,
                   URL: payload.URL,
                   postID: formData.postID
-               });
-               fetchTimeline();
-               updatePostOption("edit");
+               })
+               fetchTimeline()
+               updatePostOption('edit')
             })
             .catch(() => {
                alert('Houve um erro ao atualizar a postagem')
@@ -143,81 +144,123 @@ export default function PostContent({ data }) {
    }
 
    const [usersLiked, setUsersLiked] = useState([])
-   const contentTooltip = usersLiked.length === 0 ? 'Não há curtidas!' : usersLiked;
-   const [liked, setLiked] = useState(false) 
+   const contentTooltip = usersLiked.length === 0 ? 'Não há curtidas!' : usersLiked
+   const [liked, setLiked] = useState(false)
 
    function handleLike(postID) {
-   
-    userService.postLike({token: auth.authToken, postID })
-    .then(response => {
-      setLiked(response.data.liked)
-      setUsersLiked([...usersLiked, data.lastLikes])
-      updatePostOption("like");
-      fetchTimeline();
-    })
-    .catch(error => console.log(error))
-    
+      userService
+         .postLike({ token: auth.authToken, postID })
+         .then((response) => {
+            setLiked(response.data.liked)
+            setUsersLiked([...usersLiked, data.lastLikes])
+            updatePostOption('like')
+            fetchTimeline()
+         })
+         .catch((error) => console.log(error))
+   }
+
+   function handleRepost(likes) {
+      if (likes === '0') return true
+      return false
    }
 
    return (
-      <PostContainer data-test="post">
-         {openModal && (
-            <Modal 
-               setOpenModal={setOpenModal} 
-               updatePostOption={updatePostOption}
-               token={auth.authToken} 
-               postID={currentPostID} 
-            />
+      <Container>
+         {handleRepost(data.likes) && (
+            <span>
+               <RepostIcon /> Re-posted by you
+            </span>
          )}
-
-         <LeftPostContainer>
-            <ProfilePicture src={data.user.img} onClick={() => goToUser(data.user.id)}/>
-            <LikeContainer id='anchorTooltip'>
-               <LikeIcon data-test="like-btn" clicked={liked.toString()} onClick={() => handleLike(data.postID)}/>
-               <LikeCounter data-test="counter">{data.likes} likes</LikeCounter>
-            </LikeContainer>
-            <Tooltip
-              data-test="tooltip"
-               place="bottom"
-               className="tooltip"
-               anchorSelect="#anchorTooltip"
-               content={contentTooltip}
-            />
-         </LeftPostContainer>
-
-         <RightPostContainer>
-            <RightPostTopContent>
-               <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
-                  {data.user.name}
-               </PostTitle>
-               {data.postOwner === "1" && (
-                  <IconsContainer>
-                     <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
-                     <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)} />
-                  </IconsContainer>
-               )}
-            </RightPostTopContent>
-            {editPost ? (
-               <EditPostForm>
-                  <textarea
-                     type="text"
-                     name="description"
-                     data-test="edit-input"
-                     value={formData.description}
-                     onChange={handleChange}
-                     disabled={disabled}
-                     autoFocus
-                     onFocus={handleFocus}
-                     onKeyDown={handleSubmit}
-                  />
-               </EditPostForm>
-            ) : (
-               <PostDescription data-test="description">
-                  {postDescriptionParser(data.description)}
-               </PostDescription>
+         <PostContainer data-test="post">
+            {openModal && (
+               <Modal
+                  setOpenModal={setOpenModal}
+                  updatePostOption={updatePostOption}
+                  token={auth.authToken}
+                  postID={currentPostID}
+               />
             )}
-            <URLContent data={data} />
-         </RightPostContainer>
-      </PostContainer>
+
+            <LeftPostContainer>
+               <ProfilePicture src={data.user.img} onClick={() => goToUser(data.user.id)} />
+               <LikeContainer id="anchorTooltip">
+                  <LikeIcon
+                     data-test="like-btn"
+                     clicked={liked.toString()}
+                     onClick={() => handleLike(data.postID)}
+                  />
+                  <LikeCounter data-test="counter">{data.likes} likes</LikeCounter>
+               </LikeContainer>
+               <Tooltip
+                  data-test="tooltip"
+                  place="bottom"
+                  className="tooltip"
+                  anchorSelect="#anchorTooltip"
+                  content={contentTooltip}
+               />
+            </LeftPostContainer>
+
+            <RightPostContainer>
+               <RightPostTopContent>
+                  <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
+                     {data.user.name}
+                  </PostTitle>
+                  {data.postOwner === '1' && (
+                     <IconsContainer>
+                        <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
+                        <DeleteIcon
+                           data-test="delete-btn"
+                           onClick={() => handleModal(data.postID)}
+                        />
+                     </IconsContainer>
+                  )}
+               </RightPostTopContent>
+               {editPost ? (
+                  <EditPostForm>
+                     <textarea
+                        type="text"
+                        name="description"
+                        data-test="edit-input"
+                        value={formData.description}
+                        onChange={handleChange}
+                        disabled={disabled}
+                        autoFocus
+                        onFocus={handleFocus}
+                        onKeyDown={handleSubmit}
+                     />
+                  </EditPostForm>
+               ) : (
+                  <PostDescription data-test="description">
+                     {postDescriptionParser(data.description)}
+                  </PostDescription>
+               )}
+               <URLContent data={data} />
+            </RightPostContainer>
+         </PostContainer>
+      </Container>
    )
 }
+
+const Container = styled.div`
+   border-radius: 16px;
+
+   display: flex;
+   flex-direction: column;
+   background: #1e1e1e;
+
+   span {
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      padding: 6px 20px;
+
+      font-family: Lato;
+      font-size: 11px;
+   }
+`
+
+const RepostIcon = styled(FaRetweet)`
+   font-size: 20px;
+`

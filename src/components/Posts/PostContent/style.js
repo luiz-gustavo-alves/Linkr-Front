@@ -9,8 +9,7 @@ const PostContainer = styled.div`
    height: auto;
    display: flex;
    background-color: #000;
-   border-radius: 10px;
-   margin-bottom: 40px;
+   border-radius: 16px;
    padding: 20px;
 
    @media (max-width: 938px) {

@@ -87,6 +87,7 @@ export const Body = styled.div`
 export const PostsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 38px;
   width: 612px;
 
   @media (max-width: 938px) {
