@@ -25,6 +25,11 @@ import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function Posts({ data, details, newPosts }) {
 
+  /* Default value for hashtag/user page */
+  if (!newPosts) {
+    newPosts = {value: false};
+  }
+
   const { updateLimit } = useLimit();
   const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { pathname } = useLocation();
