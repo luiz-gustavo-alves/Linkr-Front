@@ -25,6 +25,10 @@ import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function Posts({ data, details, newPosts }) {
 
+  if (!newPosts) {
+    newPosts = {value: false};
+  }
+
   const { updateLimit } = useLimit();
   const { fetchTimeline, updatePostOption } = useFetchTimeline();
   const { pathname } = useLocation();
@@ -77,7 +81,7 @@ export default function Posts({ data, details, newPosts }) {
     <Container>
       <Content>
         {
-          (pathname == '/timeline' || pathname.startsWith('/hashtag')) ?
+          (pathname === '/timeline' || pathname.startsWith('/hashtag')) ?
           <Title data-test={titleDataTest}>{details.title}</Title>
           :
           <TitleUser name={details.title} photo={photo} />
