@@ -97,7 +97,6 @@ export default function SearchInput() {
                states.result.map((user) => {
                   return (
                      <UserSearchResult
-                        data-test="user-search"
                         key={user.id}
                         id={user.id}
                         image={user.imageURL}
