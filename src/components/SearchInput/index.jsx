@@ -1,10 +1,14 @@
 import { DebounceInput } from 'react-debounce-input'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import UserSearchResult from '../UserSearchResult'
 import { Container } from './style'
 import userService from '../../services/user.service'
+import { AuthContext } from '../../contexts/auth.context'
 
 export default function SearchInput() {
+   const { auth } = useContext(AuthContext)
+   const [currentUserID, setCurrentUserID] = useState(false)
+
    const [states, setStates] = useState({
       users: [],
       searchString: '',
@@ -13,6 +17,13 @@ export default function SearchInput() {
       inputRef: useRef(null),
       containerRef: useRef(null)
    })
+
+   useEffect(() => {
+      const [headerBase64, payloadBase64, signature] = auth.authToken.split('.')
+      const payload = JSON.parse(atob(payloadBase64))
+
+      setCurrentUserID(payload.id)
+   }, [])
 
    const handleChangeSearch = (e) => {
       setStates({ ...states, searchInput: e.target.value })
@@ -31,14 +42,15 @@ export default function SearchInput() {
    useEffect(() => {
       states.searchInput &&
          userService
-            .getUsersBySearch(states.searchInput)
+            .getUsersBySearch({query: states.searchInput, userID: currentUserID})
             .then((response) => {
+               console.log(response.data)
                setStates({
                   ...states,
                   result: response.data.filter((user) => {
                      const input = states.searchInput.toLowerCase()
                      const username = user.name.toLowerCase()
-
+                     
                      return username.startsWith(input)
                   })
                })
@@ -85,13 +97,13 @@ export default function SearchInput() {
                states.result.map((user) => {
                   return (
                      <UserSearchResult
-                        data-test="user-search"
                         key={user.id}
                         id={user.id}
                         image={user.imageURL}
                         username={user.name}
                         states={states}
                         setStates={setStates}
+                        isFollowing={user.isFollower}
                      />
                   )
                })
