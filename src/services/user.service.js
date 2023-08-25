@@ -1,6 +1,11 @@
 import API from "./api";
 import { createConfig } from "./api";
 
+function countFollowing (token) {
+    const config = createConfig(token);
+    return API.get("/countFollowing", config);
+}
+
 function countTimelinePosts (token) {
     const config = createConfig(token);
     return API.get("/countTimelinePosts", config);
@@ -49,6 +54,7 @@ function postComment (payload, token) {
 }
 
 const userService = {
+    countFollowing,
     countTimelinePosts,
     getTimelinePosts,
     getPostsByUser,

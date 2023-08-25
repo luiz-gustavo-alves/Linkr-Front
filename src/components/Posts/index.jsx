@@ -42,7 +42,9 @@ export default function Posts({ data, details, newPosts }) {
       return;
     }
 
-    setPhoto(data[0].user.img);
+    if (pathname.includes("/user")) {
+      setPhoto(data[0].user.img);
+    }
     
 
     hashService.hashtagsList()

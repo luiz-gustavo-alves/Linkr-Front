@@ -53,8 +53,22 @@ export default function Home() {
 
         /* No posts in Database */
         if (res.data.length === 0) {
-          setPostDetails({...postDetails, 
-          defaultMessage: "You don't follow anyone yet. Search for new friends!"});
+
+          userService.countFollowing(auth.authToken)
+            .then(res => {
+
+              const { counter } = res.data;
+
+              if (counter === 0) {
+                setPostDetails({...postDetails, 
+                defaultMessage: "You don't follow anyone yet. Search for new friends!"});
+
+              } else {
+                setPostDetails({...postDetails, 
+                defaultMessage: "No posts found from your friends!"});
+              }
+            })
+            .catch(err => console.log(err));
         }
 
         /* Auto fetch posts if first timeline access or publish/update/delete/refresh posts */
