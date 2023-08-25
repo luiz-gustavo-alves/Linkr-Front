@@ -2,14 +2,15 @@ import {
   Posts
 } from "../../components";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import hashService from "../../services/hash.service";
+import { AuthContext } from "../../contexts/auth.context";
 
 export default function HashtagPage() {
 
   const { hashtag } = useParams();
-
+  const { auth } = useContext(AuthContext);
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
     title: hashtag,
@@ -18,7 +19,7 @@ export default function HashtagPage() {
   })
 
   useEffect(() => {
-    hashService.hashtagPosts(hashtag)
+    hashService.hashtagPosts(hashtag, auth.authToken)
     .then(res => {
       setPostData(res.data[0].posts);
       setPostDetails((prevDetails) => ({

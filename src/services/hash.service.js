@@ -5,9 +5,10 @@ function hashtagsList () {
     return API.get(`/hashtags`);
 }
 
-function hashtagPosts (name) {
+function hashtagPosts (name, token) {
+    const config = createConfig(token);
     const encodedName = encodeURIComponent("#"+name);
-    return API.get(`/hashtags/${encodedName}`);
+    return API.get(`/hashtags/${encodedName}`, config);
 }
 
 const hashService = {

@@ -4,13 +4,15 @@ import {
   Posts
 } from "../../components";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../contexts/auth.context";
 
 export default function UserPage() {
   
   const { id } = useParams();
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
     title: "",
@@ -20,7 +22,7 @@ export default function UserPage() {
 
   useEffect(() => {
     
-    userService.getPostsByUser(id)
+    userService.getPostsByUser(id, auth.authToken)
     .then(res => {
       setPostData(res.data);
       setPostDetails((prevDetails) => ({
