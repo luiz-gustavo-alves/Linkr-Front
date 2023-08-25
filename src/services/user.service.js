@@ -39,9 +39,13 @@ function postFollow (token, id) {
 }
 
 function checkFollow (token, id) {
-    console.log("AQUI ESTOU EU")
     const config = createConfig(token);
     return API.get(`/follow/${id}`, config);
+}
+
+function postComment (payload, token) {
+    const config = createConfig(token);
+    return API.post("comments", payload, config);
 }
 
 const userService = {
@@ -53,7 +57,8 @@ const userService = {
     getUsersBySearch,
     postLike,
     postFollow,
-    checkFollow
+    checkFollow,
+    postComment
 }
 
 export default userService;
