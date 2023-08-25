@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { Container } from './index.style'
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function UserSearchResult({ id, image, username, states, setStates, isFollowing }) {
+   
+   const { fetchTimeline } = useFetchTimeline();
    const navigate = useNavigate()
 
    return (
@@ -9,6 +12,7 @@ export default function UserSearchResult({ id, image, username, states, setState
          data-test="user-search"
          onClick={() => {
             setStates({ ...states, result: [], searchInput: null, searchString: '' })
+            fetchTimeline();
             navigate(`/user/${id}`)
          }}
       >

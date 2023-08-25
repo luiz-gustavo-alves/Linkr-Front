@@ -28,6 +28,11 @@ export default function HashtagPage() {
 
     hashService.hashtagPosts(hashtag, auth.authToken)
     .then(res => {
+      
+      if (res.data.posts[0].allLikedUserIDs === null) {
+        res.data.posts[0].allLikedUserIDs = "";
+      }
+
       setPostData(res.data.posts);
       setPostDetails((prevDetails) => ({
         ...prevDetails,

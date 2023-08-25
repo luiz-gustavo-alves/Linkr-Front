@@ -5,12 +5,13 @@ import {
 } from "../../components";
 
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context";
 import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function UserPage() {
-  
+
+  const { pathname } = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -31,21 +32,29 @@ export default function UserPage() {
     userService.getPostsByUser(id, auth.authToken)
     .then(res => {
 
-      if (res.data.length === 0) {
-        navigate("/timeline");
-      }
+      const { user } = res.data[0];
 
-      setPostData(res.data);
-      setPostDetails((prevDetails) => ({
-        ...prevDetails,
-        title: `${res.data[0].user.name} posts`
-      }));
+      if (!user) {
+        setPostData(res.data);
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          title: `${res.data[0].name} posts`,
+          defaultMessage: "There are no posts yet from this user!"
+        }));
+
+      } else {
+        setPostData(res.data);
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          title: `${res.data[0].user.name} posts`
+        }));
+      }
     })
     .catch((err) => {
       navigate("/timeline");
     });
 
-  }, [fetch]);
+  }, [fetch, pathname]);
 
   return (
     <Posts 

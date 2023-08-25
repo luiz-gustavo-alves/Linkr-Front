@@ -47,6 +47,16 @@ export default function PostContent({ data }) {
    const [currentPostData, setCurrentPostData] = useState(data)
 
    useEffect(() => {
+
+
+      if (currentPostData !== null) {
+
+         const { user } = currentPostData;
+         if (!user) {
+            return;
+         }
+      }
+
       const [headerBase64, payloadBase64, signature] = auth.authToken.split('.')
       const payload = JSON.parse(atob(payloadBase64))
 

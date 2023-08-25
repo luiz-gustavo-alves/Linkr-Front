@@ -42,8 +42,18 @@ export default function Posts({ data, details, newPosts }) {
       return;
     }
 
+    let noPosts = false;
     if (pathname.includes("/user") && !pathname.includes("/hashtag")) {
-      setPhoto(data[0].user.img);
+
+      const { user } = data[0];
+
+      if (!user) {
+        setPhoto(data[0].imageURL);
+        setShowPosts(false);
+        noPosts = true;
+      } else {
+        setPhoto(data[0].user.img);
+      }
     }
 
     hashService.hashtagsList()
@@ -51,10 +61,12 @@ export default function Posts({ data, details, newPosts }) {
         setHashtags(res.data);
       })
       .catch((err) => console.log(err));
-    
-    (data.length > 0) ? setShowPosts(true) : setShowPosts(false);
 
-  }, [ data ]);
+      if (!noPosts) {
+        (data.length > 0) ? setShowPosts(true) : setShowPosts(false);
+      }
+
+  }, [ data, fetchTimeline ]);
 
   const [hashtags, setHashtags] = useState([{id:'',hashtag:'',cont:''}]);
   const navigate = useNavigate();
