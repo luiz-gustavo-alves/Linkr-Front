@@ -30,6 +30,7 @@ function postLike (query) {
     return API.post('/post/like', query);
 }
 
+
 function postFollow (token, id) {
     const body = {follower: id}
     const config = createConfig(token);

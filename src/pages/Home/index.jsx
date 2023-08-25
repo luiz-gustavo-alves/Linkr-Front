@@ -37,6 +37,7 @@ export default function Home() {
   }) 
 
   useEffect(() => {
+    console.log(postData)
     if (!isLogged()) {
       navigate("/");
       return;

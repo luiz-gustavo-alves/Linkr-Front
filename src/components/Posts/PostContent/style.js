@@ -60,10 +60,18 @@ const LikeContainer = styled.div`
 `
 
 const LikeIcon = styled(AiFillHeart)`
-   ${({ clicked }) => {
-      return clicked === 'true'
+   ${({ clicked, liked }) => {
+      return clicked === 'true' && liked === 'false'
          ? css`
               color: red;
+              stroke: red;
+              stroke-width: 100px;
+           `
+         : clicked === 'false' && liked === 'true'
+         ? css`
+              color: red;
+              stroke: red;
+              stroke-width: 100px;
            `
          : css`
               fill: transparent;

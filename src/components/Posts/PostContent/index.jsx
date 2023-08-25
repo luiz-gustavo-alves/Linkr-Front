@@ -36,7 +36,17 @@ export default function PostContent({ data }) {
    const [disabled, setDisabled] = useState(false)
    const [editPost, setEditPost] = useState(false)
    const [openModal, setOpenModal] = useState(false)
+
+   const [currentUserID, setCurrentUserID] = useState(false)
    const [currentPostID, setCurrentPostID] = useState(false)
+   const [currentPostData, setCurrentPostData] = useState(data)
+
+   useEffect(() => {
+      const [headerBase64, payloadBase64, signature] = auth.authToken.split('.')
+      const payload = JSON.parse(atob(payloadBase64))
+
+      setCurrentUserID(payload.id)
+   }, [])
 
    const [formData, setFormData] = useState({
       description: data.description,
@@ -143,18 +153,36 @@ export default function PostContent({ data }) {
       navigate(`/user/${id}`)
    }
 
-   const [usersLiked, setUsersLiked] = useState([])
-   const contentTooltip = usersLiked.length === 0 ? 'Não há curtidas!' : usersLiked
    const [liked, setLiked] = useState(false)
+
+   function handleContentTooltip(postID) {
+      const likes = currentPostData.likes
+      const lastLikes = []
+      const userLiked = currentPostData.allLikedUserIDs.includes(currentUserID)
+
+      currentPostData['lastLikes'].forEach((like) => {
+         if (like.id !== currentUserID) {
+            lastLikes.push(like.name)
+         }
+      })
+
+      return likes === 0
+         ? 'Não há curtidas!'
+         : likes === 1 && userLiked
+         ? `Você e outras ${likes - 1} pessoas`
+         : likes >= 2 && userLiked
+         ? `Você, ${lastLikes[0] || 'Você'} e outras ${likes - 2} pessoas`
+         : likes >= 2 && !userLiked
+         ? `${lastLikes[0] || 'Você'}, ${lastLikes[1] || 'Você'} e outras ${likes - 2} pessoas`
+         : `${lastLikes[0] || 'Você'} e outras ${likes - 1} pessoas`
+   }
 
    function handleLike(postID) {
       userService
          .postLike({ token: auth.authToken, postID })
          .then((response) => {
-            setLiked(response.data.liked)
-            setUsersLiked([...usersLiked, data.lastLikes])
-            updatePostOption('like')
-            fetchTimeline()
+            setCurrentPostData({ ...data, likes: response.data.currentLikes })
+            setLiked(!liked)
          })
          .catch((error) => console.log(error))
    }
@@ -182,21 +210,28 @@ export default function PostContent({ data }) {
             )}
 
             <LeftPostContainer>
-               <ProfilePicture src={data.user.img} onClick={() => goToUser(data.user.id)} />
-               <LikeContainer id="anchorTooltip">
+               <ProfilePicture
+                  src={currentPostData.user.img}
+                  onClick={() => goToUser(currentPostData.user.id)}
+               />
+               <LikeContainer>
                   <LikeIcon
                      data-test="like-btn"
-                     clicked={liked.toString()}
-                     onClick={() => handleLike(data.postID)}
+                     onClick={() => handleLike(currentPostData.postID)}
+                     clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
+                     liked={liked.toString()}
                   />
-                  <LikeCounter data-test="counter">{data.likes} likes</LikeCounter>
+                  <LikeCounter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
+                     {currentPostData.likes} likes
+                  </LikeCounter>
                </LikeContainer>
+
                <Tooltip
                   data-test="tooltip"
                   place="bottom"
                   className="tooltip"
-                  anchorSelect="#anchorTooltip"
-                  content={contentTooltip}
+                  anchorSelect={`#anchorTooltip-${currentPostData.postID}`}
+                  content={() => handleContentTooltip(currentPostData.postID)}
                />
             </LeftPostContainer>
 
