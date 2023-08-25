@@ -185,9 +185,13 @@ export default function PostContent({ data }) {
             }
 
             if (lastLikes[0] === undefined) {
-               return `${lastLikes[0] ?? 'Você'}, ${lastLikes[1] ?? 'Você'} e outras ${likes - 2} curtiram esse post.`
+               return `${lastLikes[0] ?? 'Você'}, ${lastLikes[1] ?? 'Você'} e outras ${
+                  likes - 2
+               } curtiram esse post.`
             }
-            return `${lastLikes[1] ?? 'Você'}, ${lastLikes[0] ?? 'Você'} e outras ${likes - 2} crutiram esse post.`
+            return `${lastLikes[1] ?? 'Você'}, ${lastLikes[0] ?? 'Você'} e outras ${
+               likes - 2
+            } crutiram esse post.`
 
             break
 
