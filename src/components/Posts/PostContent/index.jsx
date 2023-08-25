@@ -25,17 +25,26 @@ import postService from '../../../services/posts.service'
 import { AuthContext } from '../../../contexts/auth.context'
 import { useNavigate } from 'react-router-dom'
 import userService from '../../../services/user.service'
-import useFetchTimeline from "../../../hooks/useFetchTimeline";
+import useFetchTimeline from '../../../hooks/useFetchTimeline'
 
 export default function PostContent({ data }) {
-
    const { auth } = useContext(AuthContext)
-   const { fetchTimeline, updatePostOption } = useFetchTimeline();
+   const { fetchTimeline, updatePostOption } = useFetchTimeline()
 
    const [disabled, setDisabled] = useState(false)
    const [editPost, setEditPost] = useState(false)
    const [openModal, setOpenModal] = useState(false)
+
+   const [currentUserID, setCurrentUserID] = useState(false)
    const [currentPostID, setCurrentPostID] = useState(false)
+   const [currentPostData, setCurrentPostData] = useState(data)
+
+   useEffect(() => {
+      const [headerBase64, payloadBase64, signature] = auth.authToken.split('.')
+      const payload = JSON.parse(atob(payloadBase64))
+
+      setCurrentUserID(payload.id)
+   }, [])
 
    const [formData, setFormData] = useState({
       description: data.description,
@@ -68,15 +77,15 @@ export default function PostContent({ data }) {
          postService
             .updatePost(payload, formData.postID, auth.authToken)
             .then(() => {
-               setEditPost(false);
-               setDisabled(false);
+               setEditPost(false)
+               setDisabled(false)
                setFormData({
                   description: payload.description,
                   URL: payload.URL,
                   postID: formData.postID
-               });
-               fetchTimeline();
-               updatePostOption("edit");
+               })
+               fetchTimeline()
+               updatePostOption('edit')
             })
             .catch(() => {
                alert('Houve um erro ao atualizar a postagem')
@@ -142,46 +151,96 @@ export default function PostContent({ data }) {
       navigate(`/user/${id}`)
    }
 
-   const [usersLiked, setUsersLiked] = useState([])
-   const contentTooltip = usersLiked.length === 0 ? 'Não há curtidas!' : usersLiked;
-   const [liked, setLiked] = useState(false) 
+   const [liked, setLiked] = useState(false)
+
+   function handleContentTooltip() {
+      const likes = Number(currentPostData.likes)
+      const lastLikes = []
+      const userLiked = currentPostData.allLikedUserIDs.includes(currentUserID)
+
+      currentPostData['lastLikes'].forEach((like) => {
+         if (like.id !== currentUserID) {
+            lastLikes.push(like.name)
+         }
+      })
+
+      switch (true) {
+         case likes === 0:
+            return 'Não há curtidas!'
+            break
+         case likes === 1:
+            if (userLiked) {
+               return `Você e outras ${likes - 1} curtiram esse post.`
+            }
+            if (lastLikes[1] === undefined) {
+               return `${lastLikes[0] ?? 'Você'} e outras ${likes - 1} curtiram esse post.`
+            }
+
+            return `${lastLikes[1] ?? 'Você'} e outras ${likes - 1} curtiram esse post.`
+
+            break
+         case likes >= 2:
+            if (userLiked) {
+               return `Você, ${lastLikes[0] ?? 'Você'} e outras ${likes - 2} curtiram esse post.`
+            }
+
+            if (lastLikes[0] === undefined) {
+               return `${lastLikes[0] ?? 'Você'}, ${lastLikes[1] ?? 'Você'} e outras ${likes - 2} curtiram esse post.`
+            }
+            return `${lastLikes[1] ?? 'Você'}, ${lastLikes[0] ?? 'Você'} e outras ${likes - 2} crutiram esse post.`
+
+            break
+
+         default:
+            break
+      }
+   }
 
    function handleLike(postID) {
-   
-    userService.postLike({token: auth.authToken, postID })
-    .then(response => {
-      setLiked(response.data.liked)
-      setUsersLiked([...usersLiked, data.lastLikes])
-      updatePostOption("like");
-      fetchTimeline();
-    })
-    .catch(error => console.log(error))
-    
+      userService
+         .postLike({ token: auth.authToken, postID })
+         .then((response) => {
+            setCurrentPostData({ ...data, likes: response.data.currentLikes })
+            setLiked(!liked)
+            fetchTimeline()
+         })
+         .catch((error) => console.log(error))
    }
 
    return (
       <PostContainer data-test="post">
          {openModal && (
-            <Modal 
-               setOpenModal={setOpenModal} 
+            <Modal
+               setOpenModal={setOpenModal}
                updatePostOption={updatePostOption}
-               token={auth.authToken} 
-               postID={currentPostID} 
+               token={auth.authToken}
+               postID={currentPostID}
             />
          )}
 
          <LeftPostContainer>
-            <ProfilePicture src={data.user.img} onClick={() => goToUser(data.user.id)}/>
-            <LikeContainer id='anchorTooltip'>
-               <LikeIcon data-test="like-btn" clicked={liked.toString()} onClick={() => handleLike(data.postID)}/>
-               <LikeCounter data-test="counter">{data.likes} likes</LikeCounter>
+            <ProfilePicture
+               src={currentPostData.user.img}
+               onClick={() => goToUser(currentPostData.user.id)}
+            />
+            <LikeContainer>
+               <LikeIcon
+                  data-test="like-btn"
+                  onClick={() => handleLike(currentPostData.postID)}
+                  clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
+                  liked={liked.toString()}
+               />
+               <LikeCounter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
+                  {currentPostData.likes} likes
+               </LikeCounter>
             </LikeContainer>
+
             <Tooltip
-              data-test="tooltip"
+               data-test="tooltip"
                place="bottom"
                className="tooltip"
-               anchorSelect="#anchorTooltip"
-               content={contentTooltip}
+               anchorSelect={`#anchorTooltip-${currentPostData.postID}`}
+               content={handleContentTooltip}
             />
          </LeftPostContainer>
 
@@ -190,7 +249,7 @@ export default function PostContent({ data }) {
                <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
                   {data.user.name}
                </PostTitle>
-               {data.postOwner === "1" && (
+               {data.postOwner === '1' && (
                   <IconsContainer>
                      <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
                      <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)} />
