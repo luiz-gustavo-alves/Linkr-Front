@@ -7,12 +7,14 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth.context";
+import useFetchTimeline from "../../hooks/useFetchTimeline";
 
 export default function UserPage() {
   
   const { id } = useParams();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
+  const { fetch, postOption, updatePostOption } = useFetchTimeline();
   const [postData, setPostData] = useState(null);
   const [postDetails, setPostDetails] = useState({
     title: "",
@@ -21,6 +23,10 @@ export default function UserPage() {
   })
 
   useEffect(() => {
+
+    if (postOption !== null) {
+      updatePostOption(null);
+    }
     
     userService.getPostsByUser(id, auth.authToken)
     .then(res => {
@@ -39,7 +45,7 @@ export default function UserPage() {
       navigate("/timeline");
     });
 
-  }, []);
+  }, [fetch]);
 
   return (
     <Posts 

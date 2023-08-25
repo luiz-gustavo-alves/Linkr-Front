@@ -246,6 +246,7 @@ export default function PostContent({ data }) {
    }
 
    const setPostComments = () => {
+
       return (
          <>
             <CommentsContainer data-test="comment-box">
@@ -280,7 +281,7 @@ export default function PostContent({ data }) {
             </CommentsContainer>
             <UserCommentContainer>
                <div className="userLeftCommentContainer">
-                  <img src={data.user.img} alt={data.user.name} />
+                  <img src={auth.imageURL} />
                </div>
                <form className="userRightCommentContainer" onSubmit={handleCommentSubmit}>
                   <input
