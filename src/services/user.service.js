@@ -1,8 +1,9 @@
 import API from "./api";
 import { createConfig } from "./api";
 
-function countTimelinePosts () {
-    return API.get("/countTimelinePosts");
+function countTimelinePosts (token) {
+    const config = createConfig(token);
+    return API.get("/countTimelinePosts", config);
 }
 
 function getTimelinePosts (token, limit) {
