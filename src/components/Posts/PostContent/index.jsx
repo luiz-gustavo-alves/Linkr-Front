@@ -1,10 +1,12 @@
 import {
+   Container,
    PostContainer,
    LeftPostContainer,
    ProfilePicture,
-   LikeContainer,
+   PostOptions,
    LikeIcon,
-   LikeCounter,
+   CommentIcon,
+   Counter,
    RightPostContainer,
    RightPostTopContent,
    PostTitle,
@@ -13,7 +15,11 @@ import {
    EditIcon,
    DeleteIcon,
    PostDescription,
-   Hashtag
+   Hashtag,
+   CommentsContainer,
+   CommentContent,
+   UserCommentContainer,
+   SendCommentIcon
 } from './style'
 
 import URLContent from '../URLContent'
@@ -28,6 +34,7 @@ import userService from '../../../services/user.service'
 import useFetchTimeline from '../../../hooks/useFetchTimeline'
 
 export default function PostContent({ data }) {
+
    const { auth } = useContext(AuthContext)
    const { fetchTimeline, updatePostOption } = useFetchTimeline()
 
@@ -167,7 +174,7 @@ export default function PostContent({ data }) {
       switch (true) {
          case likes === 0:
             return 'Não há curtidas!'
-            break
+
          case likes === 1:
             if (userLiked) {
                return `Você e outras ${likes - 1} curtiram esse post.`
@@ -178,7 +185,7 @@ export default function PostContent({ data }) {
 
             return `${lastLikes[1] ?? 'Você'} e outras ${likes - 1} curtiram esse post.`
 
-            break
+
          case likes >= 2:
             if (userLiked) {
                return `Você, ${lastLikes[0] ?? 'Você'} e outras ${likes - 2} curtiram esse post.`
@@ -192,8 +199,6 @@ export default function PostContent({ data }) {
             return `${lastLikes[1] ?? 'Você'}, ${lastLikes[0] ?? 'Você'} e outras ${
                likes - 2
             } crutiram esse post.`
-
-            break
 
          default:
             break
@@ -211,76 +216,177 @@ export default function PostContent({ data }) {
          .catch((error) => console.log(error))
    }
 
-   return (
-      <PostContainer data-test="post">
-         {openModal && (
-            <Modal
-               setOpenModal={setOpenModal}
-               updatePostOption={updatePostOption}
-               token={auth.authToken}
-               postID={currentPostID}
-            />
-         )}
+   const [showComments, setShowComments] = useState(false);
+   const [userComment, setUserComment] = useState({ comment: "" });
 
-         <LeftPostContainer>
-            <ProfilePicture
-               src={currentPostData.user.img}
-               onClick={() => goToUser(currentPostData.user.id)}
-            />
-            <LikeContainer>
-               <LikeIcon
-                  data-test="like-btn"
-                  onClick={() => handleLike(currentPostData.postID)}
-                  clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
-                  liked={liked.toString()}
-               />
-               <LikeCounter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
-                  {currentPostData.likes} likes
-               </LikeCounter>
-            </LikeContainer>
+   function toggleComments() {
+      setShowComments(!showComments)
+   }
 
-            <Tooltip
-               data-test="tooltip"
-               place="bottom"
-               className="tooltip"
-               anchorSelect={`#anchorTooltip-${currentPostData.postID}`}
-               content={handleContentTooltip}
-            />
-         </LeftPostContainer>
+   function handleComment (e) {
+      setUserComment({...userComment, [e.target.name]: e.target.value})
+   }
 
-         <RightPostContainer>
-            <RightPostTopContent>
-               <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
-                  {data.user.name}
-               </PostTitle>
-               {data.postOwner === '1' && (
-                  <IconsContainer>
-                     <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
-                     <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)} />
-                  </IconsContainer>
-               )}
-            </RightPostTopContent>
-            {editPost ? (
-               <EditPostForm>
-                  <textarea
+   function handleCommentSubmit (e) {
+      e.preventDefault();
+
+      const payload = {
+         userID_owner: data.user.id,
+         postID: data.postID,
+         comment: userComment.comment
+      }
+
+      userService.postComment(payload, auth.authToken)
+         .then(() => {
+            setUserComment({comment: ""});
+            updatePostOption("comment");
+            fetchTimeline();
+         })
+         .catch(err => console.log(err));
+   }
+
+   const setPostComments = () => {
+      return (
+         <>
+            <CommentsContainer data-test="comment-box">
+               {data.comments.map(element => {
+
+                  let commentType;
+                  if (element.type === "follower") {
+                     commentType = "• following";
+                  } else if (element.type === "owner") {
+                     commentType = "• post’s author"
+                  } else {
+                     commentType = "";
+                  }
+
+                  return (
+                     <CommentContent key={element.commentID} data-test="comment">
+                        <div className="commentLeftContent">
+                           <img src={element.user.img} alt={element.user.name} />
+                        </div>
+                        <div className="commentRightContent">
+                           <div className="commentUserDetails">
+                              <h2>{element.user.name}</h2>
+                              <h3>{commentType}</h3>
+                           </div>
+                           <div className="comment">
+                              <h3>{element.comment}</h3>
+                           </div>
+                        </div>
+                     </CommentContent>
+                  )
+               })}
+            </CommentsContainer>
+            <UserCommentContainer>
+               <div className="userLeftCommentContainer">
+                  <img src={data.user.img} alt={data.user.name} />
+               </div>
+               <form className="userRightCommentContainer" onSubmit={handleCommentSubmit}>
+                  <input
                      type="text"
-                     name="description"
-                     data-test="edit-input"
-                     value={formData.description}
-                     onChange={handleChange}
-                     disabled={disabled}
-                     autoFocus
-                     onFocus={handleFocus}
-                     onKeyDown={handleSubmit}
+                     name="comment"
+                     data-test="comment-input"
+                     value={userComment.comment}
+                     onChange={handleComment}
+                     placeholder="write a comment..."
                   />
-               </EditPostForm>
-            ) : (
-               <PostDescription data-test="description">
-                  {postDescriptionParser(data.description)}
-               </PostDescription>
+                  <button type="submit" data-test="comment-submit">
+                     <SendCommentIcon />
+                  </button>
+               </form>
+            </UserCommentContainer>
+         </>
+      )
+   }
+
+   const postComments = setPostComments();
+
+   return (
+      <Container>
+         <PostContainer data-test="post">
+            {openModal && (
+               <Modal
+                  setOpenModal={setOpenModal}
+                  updatePostOption={updatePostOption}
+                  token={auth.authToken}
+                  postID={currentPostID}
+               />
             )}
-            <URLContent data={data} />
-         </RightPostContainer>
-      </PostContainer>
+
+            <LeftPostContainer>
+               <ProfilePicture
+                  src={currentPostData.user.img}
+                  onClick={() => goToUser(currentPostData.user.id)}
+               />
+               <PostOptions>
+                  <div className="options">
+                     <LikeIcon
+                        data-test="like-btn"
+                        onClick={() => handleLike(currentPostData.postID)}
+                        clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
+                        liked={liked.toString()}
+                     />
+                     <Counter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
+                        {currentPostData.likes} likes
+                     </Counter>
+                  </div>
+                  <div className="options">
+                     <CommentIcon 
+                        data-test="comment-btn"
+                        onClick={toggleComments}
+                     />
+                     <Counter data-test="comment-counter">
+                        {data.comments.length} comments
+                     </Counter>
+                  </div>
+               </PostOptions>
+
+               <Tooltip
+                  data-test="tooltip"
+                  place="bottom"
+                  className="tooltip"
+                  anchorSelect={`#anchorTooltip-${currentPostData.postID}`}
+                  content={handleContentTooltip}
+               />
+            </LeftPostContainer>
+
+            <RightPostContainer>
+               <RightPostTopContent>
+                  <PostTitle data-test="username" onClick={() => goToUser(data.user.id)}>
+                     {data.user.name}
+                  </PostTitle>
+                  {data.postOwner === '1' && (
+                     <IconsContainer>
+                        <EditIcon data-test="edit-btn" onClick={toggleEditPost} />
+                        <DeleteIcon data-test="delete-btn" onClick={() => handleModal(data.postID)} />
+                     </IconsContainer>
+                  )}
+               </RightPostTopContent>
+               {editPost ? (
+                  <EditPostForm>
+                     <textarea
+                        type="text"
+                        name="description"
+                        data-test="edit-input"
+                        value={formData.description}
+                        onChange={handleChange}
+                        disabled={disabled}
+                        autoFocus
+                        onFocus={handleFocus}
+                        onKeyDown={handleSubmit}
+                     />
+                  </EditPostForm>
+               ) : (
+                  <PostDescription data-test="description">
+                     {postDescriptionParser(data.description)}
+                  </PostDescription>
+               )}
+               <URLContent data={data} />
+            </RightPostContainer>
+         </PostContainer>
+         
+         {showComments && postComments}
+      </Container>
    )
 }

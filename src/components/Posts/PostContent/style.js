@@ -3,18 +3,27 @@ import styled, { css } from 'styled-components'
 import { AiFillHeart } from 'react-icons/ai'
 import { HiOutlinePencilAlt } from 'react-icons/hi'
 import { BsTrash } from 'react-icons/bs'
+import { AiOutlineComment } from 'react-icons/ai'
+import { BiNavigation } from 'react-icons/bi'
 
-const PostContainer = styled.div`
+const Container = styled.div`
    width: 100%;
    height: auto;
    display: flex;
-   background-color: #000;
-   border-radius: 10px;
+   flex-direction: column;
    margin-bottom: 40px;
+`
+
+const PostContainer = styled.div`
+   display: flex;
    padding: 20px;
+   background-color: #000;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
 
    @media (max-width: 938px) {
-      border-radius: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
    }
 `
 
@@ -52,12 +61,19 @@ const ProfilePicture = styled.img`
    cursor: pointer;
 `
 
-const LikeContainer = styled.div`
+const PostOptions = styled.div`
    display: flex;
    flex-direction: column;
-   gap: 5px;
+   gap: 20px;
    margin-top: 15px;
    align-items: center;
+
+   .options {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+   }
 `
 
 const LikeIcon = styled(AiFillHeart)`
@@ -85,10 +101,19 @@ const LikeIcon = styled(AiFillHeart)`
    cursor: pointer;
 `
 
-const LikeCounter = styled.h3`
+const CommentIcon = styled(AiOutlineComment)`
+   
+   width: 20px;
+   height: 20px;
+   color: #FFF;
+   cursor: pointer;
+`;
+
+const Counter = styled.h3`
    font-size: 11px;
    font-weight: 400;
    color: #fff;
+   margin-top: 5px;
 `
 
 const RightPostContainer = styled.div`
@@ -171,13 +196,137 @@ const Hashtag = styled.span`
    cursor: pointer;
 `
 
+const CommentsContainer = styled.div`
+
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   padding: 10px 20px;
+   background-color: #1E1E1E;
+`;
+
+const CommentContent = styled.div`
+
+   display: flex;
+   gap: 25px;
+   padding-bottom: 15px;
+   padding-top: 10px;
+   border-bottom: 2px solid #353535;
+
+   .commentLeftContent {
+      
+      img {
+         width: 40px;
+         height: 40px;
+         border-radius: 20px;
+         object-fit: contain;
+      }
+   }
+
+   .commentRightContent {
+      
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+   }
+   
+   .commentUserDetails {
+
+      display: flex;
+      gap: 10px;
+
+      h2 {
+         font-size: 15px;
+         color: #F3F3F3;
+      }
+
+      h3 {
+         font-size: 15px;
+         color: #565656;
+      }
+   }
+
+   .comment {
+
+      h3 {
+         font-size: 15px;
+         line-height: 25px;
+         color: #ACACAC;
+      }
+   } 
+`;
+
+const UserCommentContainer = styled.div`
+
+   display: flex;
+   gap: 20px;
+   height: 60px;
+   align-items: center;
+   padding: 10px 20px;
+   background-color: #1E1E1E;
+
+   .userLeftCommentContainer {
+
+      img {
+         width: 40px;
+         height: 40px;
+         border-radius: 20px;
+         object-fit: cover;
+      }
+   }
+
+   .userRightCommentContainer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+
+      input {
+         width: 100%;
+         height: 40px;
+         border: none;
+         outline: none;
+         border-radius: 8px;
+         background: #252525;
+         padding: 10px 50px 10px 17px;
+         font-size: 16px;
+         color: #FFF;
+
+         &::placeholder {
+            color: #575757;
+         }
+      }
+
+      button {
+         background-color: inherit;
+         outline: none;
+         border: none;
+         position: absolute;
+         right: 10px;
+         top: 10px;
+      }
+   }
+`;
+
+const SendCommentIcon = styled(BiNavigation)`
+
+   width: 20px;
+   height: 20px;
+   color: #FFF;
+   cursor: pointer;
+`;
+
 export {
+   Container,
    PostContainer,
    LeftPostContainer,
    ProfilePicture,
-   LikeContainer,
+   PostOptions,
    LikeIcon,
-   LikeCounter,
+   CommentIcon,
+   Counter,
    RightPostContainer,
    RightPostTopContent,
    PostTitle,
@@ -186,5 +335,9 @@ export {
    EditIcon,
    DeleteIcon,
    PostDescription,
-   Hashtag
+   Hashtag,
+   CommentsContainer,
+   CommentContent,
+   UserCommentContainer,
+   SendCommentIcon
 }

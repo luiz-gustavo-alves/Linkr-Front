@@ -24,6 +24,11 @@ export default function UserPage() {
     
     userService.getPostsByUser(id, auth.authToken)
     .then(res => {
+
+      if (res.data.length === 0) {
+        navigate("/timeline");
+      }
+
       setPostData(res.data);
       setPostDetails((prevDetails) => ({
         ...prevDetails,

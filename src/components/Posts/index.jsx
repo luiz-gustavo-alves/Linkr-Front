@@ -42,7 +42,9 @@ export default function Posts({ data, details, newPosts }) {
       return;
     }
 
-    setPhoto(data[0].user.img);
+    if (pathname.includes("/user")) {
+      setPhoto(data[0].user.img);
+    }
     
 
     hashService.hashtagsList()
@@ -96,7 +98,7 @@ export default function Posts({ data, details, newPosts }) {
 
           {newPosts.value &&
             <NewPostsContainer>
-              <button onClick={getNewTimelinePosts}>{newPosts.counter} new posts, load more!</button>
+              <button data-test="load-btn" onClick={getNewTimelinePosts}>{newPosts.counter} new posts, load more!</button>
               <RefreshIcon />
             </NewPostsContainer>
           }

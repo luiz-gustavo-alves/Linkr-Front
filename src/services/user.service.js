@@ -1,6 +1,11 @@
 import API from "./api";
 import { createConfig } from "./api";
 
+function countFollowing (token) {
+    const config = createConfig(token);
+    return API.get("/countFollowing", config);
+}
+
 function countTimelinePosts (token) {
     const config = createConfig(token);
     return API.get("/countTimelinePosts", config);
@@ -39,12 +44,17 @@ function postFollow (token, id) {
 }
 
 function checkFollow (token, id) {
-    console.log("AQUI ESTOU EU")
     const config = createConfig(token);
     return API.get(`/follow/${id}`, config);
 }
 
+function postComment (payload, token) {
+    const config = createConfig(token);
+    return API.post("comments", payload, config);
+}
+
 const userService = {
+    countFollowing,
     countTimelinePosts,
     getTimelinePosts,
     getPostsByUser,
@@ -53,7 +63,8 @@ const userService = {
     getUsersBySearch,
     postLike,
     postFollow,
-    checkFollow
+    checkFollow,
+    postComment
 }
 
 export default userService;
