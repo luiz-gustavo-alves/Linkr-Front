@@ -2,9 +2,10 @@ import {
    PostContainer,
    LeftPostContainer,
    ProfilePicture,
-   LikeContainer,
+   PostOptions,
    LikeIcon,
-   LikeCounter,
+   CommentIcon,
+   Counter,
    RightPostContainer,
    RightPostTopContent,
    PostTitle,
@@ -227,17 +228,27 @@ export default function PostContent({ data }) {
                src={currentPostData.user.img}
                onClick={() => goToUser(currentPostData.user.id)}
             />
-            <LikeContainer>
-               <LikeIcon
-                  data-test="like-btn"
-                  onClick={() => handleLike(currentPostData.postID)}
-                  clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
-                  liked={liked.toString()}
-               />
-               <LikeCounter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
-                  {currentPostData.likes} likes
-               </LikeCounter>
-            </LikeContainer>
+            <PostOptions>
+               <div>
+                  <LikeIcon
+                     data-test="like-btn"
+                     onClick={() => handleLike(currentPostData.postID)}
+                     clicked={currentPostData.allLikedUserIDs.includes(currentUserID).toString()}
+                     liked={liked.toString()}
+                  />
+                  <Counter data-test="counter" id={`anchorTooltip-${currentPostData.postID}`}>
+                     {currentPostData.likes} likes
+                  </Counter>
+               </div>
+               <div>
+                  <CommentIcon 
+                  
+                  />
+                  <Counter>
+                     {currentPostData.comments.length} comments
+                  </Counter>
+               </div>
+            </PostOptions>
 
             <Tooltip
                data-test="tooltip"

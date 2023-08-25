@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { AiFillHeart } from 'react-icons/ai'
 import { HiOutlinePencilAlt } from 'react-icons/hi'
 import { BsTrash } from 'react-icons/bs'
+import { AiOutlineComment } from 'react-icons/ai'
 
 const PostContainer = styled.div`
    width: 100%;
@@ -52,12 +53,19 @@ const ProfilePicture = styled.img`
    cursor: pointer;
 `
 
-const LikeContainer = styled.div`
+const PostOptions = styled.div`
    display: flex;
    flex-direction: column;
-   gap: 5px;
+   gap: 12px;
    margin-top: 15px;
    align-items: center;
+
+   > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+   }
 `
 
 const LikeIcon = styled(AiFillHeart)`
@@ -85,10 +93,19 @@ const LikeIcon = styled(AiFillHeart)`
    cursor: pointer;
 `
 
-const LikeCounter = styled.h3`
+const CommentIcon = styled(AiOutlineComment)`
+   
+   width: 20px;
+   height: 20px;
+   color: #FFF;
+   cursor: pointer;
+`;
+
+const Counter = styled.h3`
    font-size: 11px;
    font-weight: 400;
    color: #fff;
+   margin-top: 5px;
 `
 
 const RightPostContainer = styled.div`
@@ -175,9 +192,10 @@ export {
    PostContainer,
    LeftPostContainer,
    ProfilePicture,
-   LikeContainer,
+   PostOptions,
    LikeIcon,
-   LikeCounter,
+   CommentIcon,
+   Counter,
    RightPostContainer,
    RightPostTopContent,
    PostTitle,

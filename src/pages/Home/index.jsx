@@ -68,7 +68,7 @@ export default function Home() {
           updatePostOption(null);
 
           /* Count all TimelinePosts */
-          userService.countTimelinePosts()
+          userService.countTimelinePosts(auth.token)
             .then(res => {
               const { counter } = res.data;
               if (counter !== postCounter) {
