@@ -11,8 +11,9 @@ function getTimelinePosts (token, limit) {
     return API.get(`/timeline?limit=${limit}`, config);
 }
 
-function getPostsByUser (id) {
-    return API.get(`/user/${id}`);
+function getPostsByUser (id, token) {
+    const config = createConfig(token);
+    return API.get(`/user/${id}`, config);
 }
 
 function getPostsByHashtag (hashtag) {
